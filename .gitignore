@@ -13,3 +13,4 @@ dist/
 build/
 .venv/
 temp.py
+.vscode/settings.json
