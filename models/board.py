@@ -32,6 +32,8 @@ class Board:
         return True
 
     def update_bacteria(self, bacteria_id: str, bacteria: Bacteria, new_location: Location) -> bool:
+        if self.is_out_of_bounds(new_location):
+            return False
         self.remove_bacteria(bacteria_id)
         return self.add_bacteria(bacteria, new_location)
 

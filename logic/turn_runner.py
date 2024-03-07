@@ -10,8 +10,10 @@ class Turn_Runner:
         for bacteria, bacteria_locations in board.bacterias:
             bacteria_area_of_sense = self.__get_bacteria_area_of_sense(
                 bacteria, bacteria_locations, board)
-
-            bacteria.play()
+            direction = bacteria.play_turn(bacteria_area_of_sense)
+            new_location = utils.sum_locations(
+                bacteria_locations[0], direction)
+            board.update_bacteria(bacteria.id, bacteria, new_location)
 
     def __get_bacteria_area_of_sense(self, bacteria: Bacteria, bacteria_locations: list[Location], board: Board) -> list[list[Board_Object]]:
         start_location = utils.increase_location(
