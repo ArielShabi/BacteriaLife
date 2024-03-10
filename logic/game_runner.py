@@ -6,8 +6,8 @@ from models.bacteria import Bacteria, BacteriaProperties
 from models.board import Board
 from random_generator import generate_random_location
 
-BOARD_WIDTH = 500
-BOARD_HEIGHT = 500
+BOARD_WIDTH = 100
+BOARD_HEIGHT = 100
 
 ON_TURN_FINISHED = "on_turn_finished"
 TIMER_INTERVAL = 1000
@@ -24,9 +24,9 @@ class GameRunner(EventEmitter):
 
     def create_board(self):
         self.board = Board(BOARD_WIDTH, BOARD_HEIGHT)
-        for i in range(10):
+        for i in range(50):
             self.board.add_bacteria(
-                Bacteria(uuid.uuid4(), "test_name", 2, 2, BacteriaProperties()), generate_random_location(BOARD_WIDTH, BOARD_HEIGHT))
+                Bacteria(uuid.uuid4(), "test_name", 4, 4, BacteriaProperties()), generate_random_location(BOARD_WIDTH, BOARD_HEIGHT))
 
     def start(self):
         if not (self.timer and self.timer.is_alive()):

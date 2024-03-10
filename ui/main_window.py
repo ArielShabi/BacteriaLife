@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
+from PyQt5.QtCore import Qt
 
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from ui.board_ui import BoardUi
@@ -16,5 +17,9 @@ class MainWindow(QMainWindow):
         game.start()
 
     def initUI(self):
-        self.setWindowTitle("Smooth Button Movement")
-        self.setCentralWidget(self.board_ui)
+        self.setWindowTitle("Bacteria Game")
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        layout = QVBoxLayout(central_widget)
+        self.board_ui.setFixedSize(500, 500)
+        layout.addWidget(self.board_ui, alignment=Qt.AlignCenter)
