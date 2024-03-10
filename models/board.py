@@ -1,5 +1,5 @@
 from models.bacteria import Bacteria
-from models.models_types import Board_Object
+from models.models_types import BoardObject
 from project_types import Location
 
 
@@ -9,7 +9,7 @@ class Board:
         self.height: int = height
         self.bacterias: list[tuple[Bacteria, list[Location]]] = []
 
-    def get_cell_content(self, location: Location) -> Board_Object:
+    def get_cell_content(self, location: Location) -> BoardObject:
         if (self.is_out_of_bounds(location)):
             return None
         return [bacteria for bacteria, locations in self.bacterias if location in locations]

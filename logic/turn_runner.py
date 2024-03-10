@@ -1,11 +1,11 @@
 from email import utils
 from models.bacteria import Bacteria
 from models.board import Board
-from models.models_types import Board_Object
+from models.models_types import BoardObject
 from project_types import Location
 
 
-class Turn_Runner:
+class TurnRunner:
     def run_turn(self, board: Board) -> Board:
         for bacteria, bacteria_locations in board.bacterias:
             bacteria_area_of_sense = self.__get_bacteria_area_of_sense(
@@ -15,7 +15,7 @@ class Turn_Runner:
                 bacteria_locations[0], direction)
             board.update_bacteria(bacteria.id, bacteria, new_location)
 
-    def __get_bacteria_area_of_sense(self, bacteria: Bacteria, bacteria_locations: list[Location], board: Board) -> list[list[Board_Object]]:
+    def __get_bacteria_area_of_sense(self, bacteria: Bacteria, bacteria_locations: list[Location], board: Board) -> list[list[BoardObject]]:
         start_location = utils.increase_location(
             bacteria_locations[0], -bacteria.properties.sense)
 
