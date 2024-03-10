@@ -26,7 +26,7 @@ class GameRunner(EventEmitter):
         self.board = Board(BOARD_WIDTH, BOARD_HEIGHT)
         for i in range(50):
             self.board.add_bacteria(
-                Bacteria(uuid.uuid4(), "test_name", 4, 4, BacteriaProperties()), generate_random_location(BOARD_WIDTH, BOARD_HEIGHT))
+                Bacteria(uuid.uuid4(), "test_name", 4, 4, BacteriaProperties(4)), generate_random_location(BOARD_WIDTH, BOARD_HEIGHT))
 
     def start(self):
         if not (self.timer and self.timer.is_alive()):
@@ -39,5 +39,5 @@ class GameRunner(EventEmitter):
 
     def run_turn(self):
         updated_board = self.turn_runner.run_turn(self.board)
-        self.board = updated_board
+        self.board = updated_board        
         self.fire_event(ON_TURN_FINISHED, updated_board)

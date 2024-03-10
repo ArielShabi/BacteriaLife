@@ -20,6 +20,11 @@ class BoardUi(QGraphicsView):
 
         self.setScene(self.scene)
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.scene.setSceneRect(0, 0, self.viewport(
+        ).size().width(), self.viewport().size().height())
+
     def update_board(self, board: Board) -> None:
         self.board = board
         self.scene.clear()
@@ -29,6 +34,12 @@ class BoardUi(QGraphicsView):
 
             bacteria_ui = BacteriaUI(bacteria, width_offset, height_offset)
 
+            max_x = self.rect().width()-bacteria_ui.scale() * \
+                bacteria_ui.boundingRect().width()
+            max_y = self.rect().height()-bacteria_ui.scale() * \
+                bacteria_ui.boundingRect().height()
+            bacteria_x = min(max_x, width_offset * locations[0][0])
+            bacteria_y = min(max_y, height_offset * locations[0][1])
             self.scene.addItem(bacteria_ui)
             bacteria_ui.setPos(
-                width_offset*locations[0][0], height_offset * locations[0][1])
+                bacteria_x, bacteria_y)
