@@ -14,12 +14,12 @@ class Board:
             return None
         return [bacteria for bacteria, locations in self.bacterias if location in locations]
 
-    def add_bacteria(self, bacteria, start_location: Location) -> bool:
+    def add_bacteria(self, bacteria: Bacteria, start_location: Location) -> bool:
         bacteria_locations = [(x, y) for x in range(start_location[0], start_location[0] + bacteria.width)
                               for y in range(start_location[1], start_location[1] + bacteria.height)]
 
         if (any([bacteria_location in occupied_location
-                 for occupied_location in self.bacterias
+                 for _, occupied_location in self.bacterias
                  for bacteria_location in bacteria_locations
                  ])):
             return False
@@ -28,7 +28,8 @@ class Board:
         return True
 
     def remove_bacteria(self, bacteria_id) -> bool:
-        self.bacterias = [b for b in self.bacterias if b.id != bacteria_id]
+        self.bacterias = [(b, locations)
+                          for b, locations in self.bacterias if b.id != bacteria_id]
         return True
 
     def update_bacteria(self, bacteria_id: str, bacteria: Bacteria, new_location: Location) -> bool:
