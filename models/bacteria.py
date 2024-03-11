@@ -1,6 +1,6 @@
 from models.models_types import BoardObject
 from project_types import Vector
-from random_generator import generate_random_vector
+from helpers.random_generator import generate_random_vector
 
 
 class BacteriaProperties:

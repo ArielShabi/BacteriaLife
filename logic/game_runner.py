@@ -1,10 +1,11 @@
+import random
 import uuid
 from helpers.timer import Timer
 from logic.event_emitter import EventEmitter
 from logic.turn_runner import TurnRunner
 from models.bacteria import Bacteria, BacteriaProperties
 from models.board import Board
-from random_generator import generate_random_location
+from helpers.random_generator import generate_random_location
 
 BOARD_WIDTH = 100
 BOARD_HEIGHT = 100
@@ -26,7 +27,7 @@ class GameRunner(EventEmitter):
         self.board = Board(BOARD_WIDTH, BOARD_HEIGHT)
         for i in range(50):
             self.board.add_bacteria(
-                Bacteria(uuid.uuid4(), "test_name", 4, 4, BacteriaProperties(4)), generate_random_location(BOARD_WIDTH, BOARD_HEIGHT))
+                Bacteria(uuid.uuid4(), "test_name", 4, 4, BacteriaProperties(random.randint(1, 10), random.randint(1, 10))), generate_random_location(BOARD_WIDTH, BOARD_HEIGHT))
 
     def start(self):
         if not (self.timer and self.timer.is_alive()):
@@ -39,5 +40,5 @@ class GameRunner(EventEmitter):
 
     def run_turn(self):
         updated_board = self.turn_runner.run_turn(self.board)
-        self.board = updated_board        
+        self.board = updated_board
         self.fire_event(ON_TURN_FINISHED, updated_board)

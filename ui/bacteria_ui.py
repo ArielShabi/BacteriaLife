@@ -1,5 +1,8 @@
 from PyQt5.QtSvg import QGraphicsSvgItem
-from PyQt5.QtCore import QSizeF
+from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QGraphicsColorizeEffect
+from helpers.color import get_bacteria_color
+
 
 from models.bacteria import Bacteria
 
@@ -18,3 +21,7 @@ class BacteriaUI(QGraphicsSvgItem):
         scale_factor_x = desired_width / current_width
         scale_factor_y = desired_height / current_height
         self.setScale(min(scale_factor_x, scale_factor_y))
+
+        colorize_effect = QGraphicsColorizeEffect()
+        colorize_effect.setColor(get_bacteria_color(bacteria))
+        self.setGraphicsEffect(colorize_effect)

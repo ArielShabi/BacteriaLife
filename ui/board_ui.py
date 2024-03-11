@@ -30,6 +30,7 @@ class BoardUi(QGraphicsView):
         self.scene.clear()
         width_offset = self.rect().width() / self.board.width
         height_offset = self.rect().height() / self.board.height
+
         for bacteria, locations in self.board.bacterias:
 
             bacteria_ui = BacteriaUI(bacteria, width_offset, height_offset)
