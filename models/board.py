@@ -1,5 +1,6 @@
 from models.bacteria import Bacteria
 from models.bacteria_properties import BacteriaProperties
+from models.food import Food
 from models.models_types import BoardObject
 from project_types import Location
 
@@ -9,13 +10,23 @@ class Board:
         self.width: int = width
         self.height: int = height
         self.bacterias: list[tuple[Bacteria, list[Location]]] = []
+        self.foods: list[tuple[Food, Location]] = []
 
     def get_cell_content(self, location: Location) -> BoardObject:
         if (self.is_out_of_bounds(location)):
             return None
-        cell_content = [bacteria for bacteria,
-                        locations in self.bacterias if location in locations]
-        return cell_content[0] if cell_content else None
+        bacteria_content = [bacteria for bacteria,
+                            locations in self.bacterias if location in locations]
+
+        if (bacteria_content):
+            return bacteria_content[0].properties
+
+        food_content = [food for food, loc in self.foods if loc == location]
+
+        if (food_content):
+            return food_content[0]
+
+        return None
 
     def add_bacteria(self, bacteria: Bacteria, start_location: Location) -> bool:
         bacteria_locations = self.__get_bacteria_location(
@@ -30,6 +41,21 @@ class Board:
     def remove_bacteria(self, bacteria_id) -> bool:
         self.bacterias = [(b, locations)
                           for b, locations in self.bacterias if b.id != bacteria_id]
+        return True
+
+    def add_food(self, food, location: Location) -> bool:
+        if self.is_out_of_bounds(location) or self.__is_occupied([location]):
+            return False
+        self.foods.append((food, location))
+        return True
+
+    def remove_food(self, location: Location) -> bool:
+        food_amount = len(self.foods)
+        self.foods = [(f, loc) for f, loc in self.foods if loc != location]
+
+        if len(self.foods) == food_amount:
+            return False
+
         return True
 
     def update_bacteria(self, bacteria_id: str, bacteria: Bacteria, new_location: Location) -> bool:
@@ -55,7 +81,8 @@ class Board:
     def __is_occupied(self, locations: list[Location], bacteria: Bacteria = None) -> bool:
         other_bacterias = [
             bacterias for bacterias in self.bacterias if bacterias[0] != bacteria]
-        return any([bacteria_location in occupied_location
-                    for _, occupied_location in other_bacterias
-                    for bacteria_location in locations
-                    ])
+        food = [food_loc for _, food_loc in self.foods if food_loc in locations]
+        return food or any([bacteria_location in occupied_location
+                            for _, occupied_location in other_bacterias
+                            for bacteria_location in locations
+                            ])

@@ -5,7 +5,9 @@ from PyQt5.QtGui import QColor, QBrush, QPen
 
 
 from models.board import Board
+from models.food import Food
 from ui.bacteria_ui import BacteriaUI
+from ui.food_ui import FoodUI
 
 
 class BoardUi(QGraphicsView):
@@ -39,8 +41,21 @@ class BoardUi(QGraphicsView):
                 bacteria_ui.boundingRect().width()
             max_y = self.rect().height()-bacteria_ui.scale() * \
                 bacteria_ui.boundingRect().height()
-            bacteria_x = min(max_x, width_offset * locations[0][0])
-            bacteria_y = min(max_y, height_offset * locations[0][1])
+            food_x = min(max_x, width_offset * locations[0][0])
+            food_y = min(max_y, height_offset * locations[0][1])
             self.scene.addItem(bacteria_ui)
             bacteria_ui.setPos(
-                bacteria_x, bacteria_y)
+                food_x, food_y)
+
+        for food, location in self.board.foods:
+            food_ui = FoodUI(food, width_offset, height_offset)
+
+            max_x = self.rect().width()-food_ui.scale() * \
+                food_ui.boundingRect().width()
+            max_y = self.rect().height()-food_ui.scale() * \
+                food_ui.boundingRect().height()
+            food_x = min(max_x, width_offset * location[0])
+            food_y = min(max_y, height_offset * location[1])
+            self.scene.addItem(food_ui)
+            food_ui.setPos(
+                food_x, food_y)

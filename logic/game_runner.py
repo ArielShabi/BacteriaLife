@@ -4,6 +4,7 @@ from logic.bacteria_strategies.random_strategy import random_strategy
 from logic.event_emitter import EventEmitter
 from logic.turn_runner import TurnRunner
 from models.board import Board
+from models.food import Food
 
 BOARD_WIDTH = 100
 BOARD_HEIGHT = 100
@@ -24,6 +25,7 @@ class GameRunner(EventEmitter):
     def create_board(self):
         self.board = Board(BOARD_WIDTH, BOARD_HEIGHT)
         bacterias = get_random_bacterias(BOARD_WIDTH, BOARD_HEIGHT, 30)
+        self.board.add_food(Food("apple"), (10, 10))
         for bacteria, location in bacterias:
             self.board.add_bacteria(
                 bacteria,
