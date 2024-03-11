@@ -14,8 +14,8 @@ class BacteriaUI(QGraphicsSvgItem):
 
         super().__init__(BACTERIA_SVG)
 
-        desired_width = bacteria.width * width_offset
-        desired_height = bacteria.height * height_offset
+        desired_width = bacteria.properties.width * width_offset
+        desired_height = bacteria.properties.height * height_offset
         current_width = self.boundingRect().width()
         current_height = self.boundingRect().height()
         scale_factor_x = desired_width / current_width

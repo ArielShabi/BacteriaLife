@@ -1,7 +1,6 @@
 from enum import Enum
+from typing import Union
 
-# BoardObject = StrEnum('BoardObject', ['Bacteria', None])
+from models.bacteria_properties import BacteriaProperties
 
-class BoardObject(Enum):
-    Bacteria = "Bacteria"
-    Empty = None    
+BoardObject = Union[None, BacteriaProperties]
