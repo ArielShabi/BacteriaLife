@@ -7,25 +7,28 @@ from utils import get_direction_vector, get_distance, set_vector_length
 
 
 def seek_food_strategy(area_of_sense: list[list[BoardObject]], bacteria: BacteriaProperties) -> Vector:
-    food = [(x, y) for x in range(len(area_of_sense)) for y in range(len(area_of_sense[0]))
-            if isinstance(area_of_sense[x][y], Food)
-            ]
+    food_locations = [(x, y) for x in range(len(area_of_sense)) for y in range(len(area_of_sense[0]))
+                      if isinstance(area_of_sense[x][y], Food)
+                      ]
 
-    if (food == []):
+    if (food_locations == []):
         return generate_random_vector(bacteria.speed)
 
-    bacteria_location = next((x, y)
+    bacteria_location = next(((x, y)
                              for x in range(len(area_of_sense)) for y in range(len(area_of_sense[0]))
                              if isinstance(area_of_sense[x][y], BacteriaProperties) and area_of_sense[x][y].name == bacteria.name
-                             )
+                              ), None)
 
     if (bacteria_location == None):
         # This should never happen
         return generate_random_vector(bacteria.speed)
 
-    direction_vector = get_direction_vector(bacteria_location, food[0])
+    closest_food = min(food_locations, key=lambda food_location: get_distance(
+        bacteria_location, food_location))
 
-    distance = get_distance(bacteria_location, food[0])
+    direction_vector = get_direction_vector(bacteria_location, closest_food)
+
+    distance = get_distance(bacteria_location, closest_food)
 
     vector_length = min(bacteria.speed, distance)
 

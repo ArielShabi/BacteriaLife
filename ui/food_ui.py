@@ -1,15 +1,11 @@
 from PyQt5.QtSvg import QGraphicsSvgItem
-from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QGraphicsColorizeEffect
-from helpers.color import get_bacteria_color, get_food_color
+from const import SVG_SIZE
+from helpers.color import get_food_color
 
 from models.food import Food
 
 FOOD_SVG = "assets/apple.svg"
-
-
-FOOD_WIDTH = 4
-FOOD_HEIGHT = 4
 
 
 class FoodUI(QGraphicsSvgItem):
@@ -17,8 +13,8 @@ class FoodUI(QGraphicsSvgItem):
 
         super().__init__(FOOD_SVG)
 
-        desired_width = FOOD_WIDTH * width_offset
-        desired_height = FOOD_HEIGHT * height_offset
+        desired_width = SVG_SIZE * width_offset
+        desired_height = SVG_SIZE * height_offset
         current_width = self.boundingRect().width()
         current_height = self.boundingRect().height()
         scale_factor_x = desired_width / current_width

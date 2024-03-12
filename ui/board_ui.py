@@ -33,7 +33,7 @@ class BoardUi(QGraphicsView):
         width_offset = self.rect().width() / self.board.width
         height_offset = self.rect().height() / self.board.height
 
-        for bacteria, locations in self.board.bacterias:
+        for bacteria, bacteria_location in self.board.bacterias:
 
             bacteria_ui = BacteriaUI(bacteria, width_offset, height_offset)
 
@@ -41,8 +41,8 @@ class BoardUi(QGraphicsView):
                 bacteria_ui.boundingRect().width()
             max_y = self.rect().height()-bacteria_ui.scale() * \
                 bacteria_ui.boundingRect().height()
-            bacteria_x = min(max_x, width_offset * locations[0][1])
-            bacteria_y = min(max_y,  height_offset * locations[0][0])
+            bacteria_x = min(max_x, width_offset * bacteria_location[1])
+            bacteria_y = min(max_y,  height_offset * bacteria_location[0])
             self.scene.addItem(bacteria_ui)
             bacteria_ui.setPos(
                 bacteria_x, bacteria_y)

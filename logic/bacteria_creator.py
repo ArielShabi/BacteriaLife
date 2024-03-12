@@ -1,5 +1,6 @@
 import random
 import uuid
+from const import START_ENERGY
 from helpers.random_generator import generate_random_location
 from logic.bacteria_strategies.random_strategy import random_strategy
 from logic.bacteria_strategies.seek_food_strategy import seek_food_strategy
@@ -9,10 +10,11 @@ from project_types import Location
 
 
 def get_random_bacterias(board_width, board_height, amount=10) -> list[tuple[Bacteria, Location]]:
-    return [(Bacteria(uuid.uuid4(),10,
+    return [(Bacteria(uuid.uuid4(), START_ENERGY,
                       BacteriaProperties(
-        f"name_{uuid.uuid4()}", 4, 4, random.randint(
-            1, 10), 30),
+        f"name_{uuid.uuid4()}", random.randint(
+            1, 10), random.randint(
+            1, 30)),
         seek_food_strategy
     ),
         generate_random_location(board_width, board_height)

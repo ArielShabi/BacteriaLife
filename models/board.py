@@ -10,33 +10,31 @@ class Board:
     def __init__(self, width: int, height: int):
         self.width: int = width
         self.height: int = height
-        self.bacterias: list[tuple[Bacteria, list[Location]]] = []
+        self.bacterias: list[tuple[Bacteria, Location]] = []
         self.foods: list[tuple[Food, Location]] = []
 
     def get_cell_content(self, location: Location) -> BoardObject:
-        if (self.is_out_of_bounds(location)):
+        if (self.__is_out_of_bounds(location)):
             return None
-        bacteria_content = [bacteria for bacteria,
-                            locations in self.bacterias if location in locations]
+        bacteria_content = next((bacteria for bacteria, bacteria_location
+                                in self.bacterias if location == bacteria_location), None)
 
         if (bacteria_content):
-            return bacteria_content[0].properties
+            return bacteria_content.properties
 
-        food_content = [food for food, loc in self.foods if loc == location]
+        food_content = next(
+            (food for food, loc in self.foods if loc == location), None)
 
         if (food_content):
-            return food_content[0]
+            return food_content
 
         return None
 
     def add_bacteria(self, bacteria: Bacteria, start_location: Location) -> bool:
-        bacteria_locations = self.__get_bacteria_location(
-            start_location, bacteria.properties)
-
-        if (self.is_occupied(bacteria_locations)) or (self.__is_any_out_of_bounds(bacteria_locations)):
+        if (self.is_occupied(start_location)) or (self.__is_out_of_bounds(start_location)):
             return False
 
-        self.bacterias.append((bacteria, bacteria_locations))
+        self.bacterias.append((bacteria, start_location))
         return True
 
     def remove_bacteria(self, bacteria_id) -> bool:
@@ -45,7 +43,7 @@ class Board:
         return True
 
     def add_food(self, food, location: Location) -> bool:
-        if self.is_out_of_bounds(location) or self.is_occupied([location]):
+        if self.__is_out_of_bounds(location) or self.is_occupied([location]):
             return False
         self.foods.append((food, location))
         return True
@@ -57,33 +55,25 @@ class Board:
         return food
 
     def update_bacteria(self, bacteria_id: str, bacteria: Bacteria, new_location: Location) -> bool:
-        bacteria_locations: list[Location] = self.__get_bacteria_location(
-            new_location, bacteria.properties)
-
-        if self.__is_any_out_of_bounds(bacteria_locations) or self.is_occupied(bacteria_locations, bacteria):
+        if self.__is_out_of_bounds(new_location) or self.is_occupied(new_location, bacteria):
             return False
         self.remove_bacteria(bacteria_id)
-        self.bacterias.append((bacteria, bacteria_locations))
+        self.bacterias.append((bacteria, new_location))
         return True
 
-    def is_occupied(self, locations: list[Location], bacteria: Bacteria = None) -> bool:
-        other_bacterias = [
-            bacterias for bacterias in self.bacterias if bacterias[0] != bacteria]
-        food = [food_loc for _, food_loc in self.foods if food_loc in locations]
-        return food or any([bacteria_location in occupied_location
-                            for _, occupied_location in other_bacterias
-                            for bacteria_location in locations
-                            ])
+    def is_occupied(self, locations: Location, bacteria: Bacteria = None) -> bool:
+        occupied_by_bacteria = any([locations == occupied_location
+                                    for bacteria, occupied_location in self.bacterias
+                                    if bacteria != bacteria
+                                    ])
 
-    def is_out_of_bounds(self, location: Location) -> bool:
+        occupied_by_food = any(
+            [locations == food_loc for _, food_loc in self.foods])
+
+        return occupied_by_food or occupied_by_bacteria
+
+    def __is_out_of_bounds(self, location: Location) -> bool:
         return location[0] < 0 or location[0] >= self.width or location[1] < 0 or location[1] >= self.height
 
     def is_food(self, location: Location) -> bool:
         return location in [loc for _, loc in self.foods]
-
-    def __get_bacteria_location(self, start_location: Location, bacteria: BacteriaProperties) -> list[Location]:
-        return [(x, y) for x in range(start_location[0], start_location[0] + bacteria.width)
-                for y in range(start_location[1], start_location[1] + bacteria.height)]
-
-    def __is_any_out_of_bounds(self, location: list[Location]) -> bool:
-        return any([self.is_out_of_bounds(loc) for loc in location])
