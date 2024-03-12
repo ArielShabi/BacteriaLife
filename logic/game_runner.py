@@ -17,7 +17,7 @@ TIMER_INTERVAL = 1000
 class GameRunner(EventEmitter):
     def __init__(self, time_per_turn=1):
         super().__init__()
-        self.turn_runner = TurnRunner()
+        self.turn_runner = TurnRunner(10)
         self.time_per_turn = time_per_turn
         self.board = None
         self.timer: Timer = Timer(TIMER_INTERVAL)
@@ -28,10 +28,8 @@ class GameRunner(EventEmitter):
         bacterias = get_random_bacterias(BOARD_WIDTH, BOARD_HEIGHT, 30)
 
         for _ in range(10):
-            self.board.add_food(Food("apple"), (random.randint(
+            self.board.add_food(Food("apple", 10), (random.randint(
                 0, BOARD_WIDTH), random.randint(0, BOARD_HEIGHT)))
-
-        # self.board.add_food(Food("apple"), (5, 40))
 
         for bacteria, location in bacterias:
             self.board.add_bacteria(

@@ -9,7 +9,7 @@ from project_types import Location
 
 
 def get_random_bacterias(board_width, board_height, amount=10) -> list[tuple[Bacteria, Location]]:
-    return [(Bacteria(uuid.uuid4(),
+    return [(Bacteria(uuid.uuid4(),10,
                       BacteriaProperties(
         f"name_{uuid.uuid4()}", 4, 4, random.randint(
             1, 10), 30),

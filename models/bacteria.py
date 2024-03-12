@@ -4,9 +4,10 @@ from project_types import BacteriaStrategy, Vector
 
 
 class Bacteria:
-    def __init__(self, id: str,  properties: BacteriaProperties, strategy: BacteriaStrategy):
+    def __init__(self, id: str, energy: int, properties: BacteriaProperties, strategy: BacteriaStrategy):
         self.id = id
         self.properties = properties
+        self.energy = energy
         self.strategy = strategy
 
     def play_turn(self, area_of_sense: list[list[BoardObject]]) -> Vector:
