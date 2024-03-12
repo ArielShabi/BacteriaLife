@@ -4,7 +4,7 @@ from models.bacteria import Bacteria
 from models.food import Food
 
 MAX_SPEED = 10
-MAX_SENSE = 10
+MAX_SENSE = 30
 
 
 def get_bacteria_color(bacteria: Bacteria) -> QColor:

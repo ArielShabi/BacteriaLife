@@ -1,6 +1,7 @@
 import random
 
 from project_types import Location, Vector
+from utils import set_vector_length
 
 VECTOR_SIZE = 2
 
@@ -10,4 +11,5 @@ def generate_random_location(width: int, height: int) -> Location:
 
 
 def generate_random_vector(amplitude: int) -> Vector:
-    return tuple([random.randint(-amplitude, amplitude) for _ in range(VECTOR_SIZE)])
+    direction = tuple([random.randint(-1, 1) for _ in range(VECTOR_SIZE)])
+    return set_vector_length(direction, amplitude)

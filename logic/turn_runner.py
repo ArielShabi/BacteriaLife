@@ -21,14 +21,17 @@ class TurnRunner:
         start_location = utils.increase_location(
             bacteria_locations[0], -bacteria.properties.sense)
 
-        while (board.is_out_of_bounds(start_location)):
-            start_location = utils.increase_location(start_location, 1)
+        max_location = (board.width-1, board.height-1)
+        min_location = (0, 0)
+
+        start_location = utils.clamp_location(
+            start_location, min_location, max_location)
 
         end_location = utils.increase_location(
             bacteria_locations[-1], bacteria.properties.sense)
 
-        while (board.is_out_of_bounds(end_location)):
-            end_location = utils.increase_location(end_location, -1)
+        end_location = utils.clamp_location(
+            end_location, min_location, max_location)
 
         return [[board.get_cell_content((x, y))
                  for x in range(start_location[0], end_location[0])]
