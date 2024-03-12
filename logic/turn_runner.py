@@ -33,6 +33,10 @@ class TurnRunner:
         end_location = utils.clamp_location(
             end_location, min_location, max_location)
 
-        return [[board.get_cell_content((x, y))
-                 for x in range(start_location[0], end_location[0])]
-                for y in range(start_location[1], end_location[1])]
+        area_of_sense = [[
+            board.get_cell_content((x, y))
+            for y in range(start_location[1], end_location[1])
+        ]
+            for x in range(start_location[0], end_location[0])]
+
+        return area_of_sense

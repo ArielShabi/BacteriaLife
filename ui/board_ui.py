@@ -41,11 +41,11 @@ class BoardUi(QGraphicsView):
                 bacteria_ui.boundingRect().width()
             max_y = self.rect().height()-bacteria_ui.scale() * \
                 bacteria_ui.boundingRect().height()
-            food_x = min(max_x, width_offset * locations[0][0])
-            food_y = min(max_y, height_offset * locations[0][1])
+            bacteria_x = min(max_x, width_offset * locations[0][1])
+            bacteria_y = min(max_y,  height_offset * locations[0][0])
             self.scene.addItem(bacteria_ui)
             bacteria_ui.setPos(
-                food_x, food_y)
+                bacteria_x, bacteria_y)
 
         for food, location in self.board.foods:
             food_ui = FoodUI(food, width_offset, height_offset)
@@ -54,8 +54,8 @@ class BoardUi(QGraphicsView):
                 food_ui.boundingRect().width()
             max_y = self.rect().height()-food_ui.scale() * \
                 food_ui.boundingRect().height()
-            food_x = min(max_x, width_offset * location[0])
-            food_y = min(max_y, height_offset * location[1])
+            food_x = min(max_x, width_offset * location[1])
+            food_y = min(max_y, height_offset * location[0])
             self.scene.addItem(food_ui)
             food_ui.setPos(
                 food_x, food_y)

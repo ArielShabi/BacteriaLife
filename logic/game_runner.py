@@ -11,7 +11,7 @@ BOARD_WIDTH = 100
 BOARD_HEIGHT = 100
 
 ON_TURN_FINISHED = "on_turn_finished"
-TIMER_INTERVAL = 100
+TIMER_INTERVAL = 1000
 
 
 class GameRunner(EventEmitter):
@@ -25,13 +25,13 @@ class GameRunner(EventEmitter):
 
     def create_board(self):
         self.board = Board(BOARD_WIDTH, BOARD_HEIGHT)
-        bacterias = get_random_bacterias(BOARD_WIDTH, BOARD_HEIGHT, 50)
+        bacterias = get_random_bacterias(BOARD_WIDTH, BOARD_HEIGHT, 30)
 
-        # for _ in range(8):
-        #     self.board.add_food(Food("apple"), (random.randint(
-        #         0, BOARD_WIDTH), random.randint(0, BOARD_HEIGHT)))
+        for _ in range(10):
+            self.board.add_food(Food("apple"), (random.randint(
+                0, BOARD_WIDTH), random.randint(0, BOARD_HEIGHT)))
 
-        self.board.add_food(Food("apple"), (BOARD_WIDTH-2, BOARD_HEIGHT-2))
+        # self.board.add_food(Food("apple"), (5, 40))
 
         for bacteria, location in bacterias:
             self.board.add_bacteria(
