@@ -20,7 +20,6 @@ class ToolbarUI(QWidget, EventEmitter):
         self.initUI()
 
     def togglePlayPause(self, is_checked: bool):
-        print(is_checked)
         if is_checked:
             self.play_pause_button.setIcon(self.pause_icon)
         else:

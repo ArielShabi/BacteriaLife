@@ -1,7 +1,6 @@
-from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene
+from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QSizePolicy
 from PyQt5.QtSvg import QGraphicsSvgItem
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QBrush, QPen
 
 
 from models.board import Board
@@ -19,13 +18,17 @@ class BoardUi(QGraphicsView):
     def initUI(self):
         self.scene: QGraphicsScene = QGraphicsScene()
         self.setStyleSheet("border: 1px solid black;")
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.setScene(self.scene)
+        self.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
+
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.scene.setSceneRect(0, 0, self.viewport(
         ).size().width(), self.viewport().size().height())
+        self.update_board(self.board)
 
     def update_board(self, board: Board) -> None:
         self.board = board

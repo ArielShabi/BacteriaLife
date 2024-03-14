@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QStyle, QApplication
+from PyQt5.QtCore import Qt, QSize
 
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from ui.board_ui import BoardUi
@@ -24,6 +24,14 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle("Bacteria Game")
+        self.setGeometry(
+            QStyle.alignedRect(
+                Qt.LeftToRight,
+                Qt.AlignCenter,
+                QSize(1200, 900),
+                QApplication.desktop().availableGeometry()
+            )
+        )
         apply_style_sheet_file(self, CSS_FILE)
 
         central_widget = QWidget()
@@ -31,16 +39,10 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout(central_widget)
 
         layout.addWidget(self.toolbar)
-        layout.addWidget(self.board_ui, alignment=Qt.AlignCenter)
+        layout.addWidget(self.board_ui)
 
     def connect_events(self):
         self.game.add_listener(ON_TURN_FINISHED, self.board_ui.update_board)
         self.toolbar.add_listener(
             ON_PLAY_PAUSE, self.game.toggle_play_pause)
         self.toolbar.add_listener(ON_SPEED_CHANGE, self.game.change_speed)
-
-        # self.toolbar_ui.add_listener(ON_SPEED_CHANGE, self.game.change_speed)
-        # self.game.add_listener(ON_TURN_FINISHED, self.board_ui.update_board)
-        # self.game.add_listener(ON_TURN_FINISHED, self.toolbar_ui.update_turn)
-        # self.game.add_listener(ON_TURN_FINISHED, self.toolbar_ui.update_score)
-        # self.game.add_listener(ON_TURN_FINISHED, self.toolbar_ui.update_speed)

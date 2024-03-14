@@ -21,7 +21,6 @@ class TurnRunner:
         self.__duplicate_bacterias(board)
         self.__natural_selection(board)
 
-        print(len(board.bacterias))
         return board
 
     def __play_bacterias(self, board: Board):
@@ -60,7 +59,6 @@ class TurnRunner:
             if bacteria.energy < START_ENERGY * 2:
                 continue
 
-            print("duplicating")
 
             child_bacteria = copy.deepcopy(bacteria)
             child_bacteria.energy = START_ENERGY
