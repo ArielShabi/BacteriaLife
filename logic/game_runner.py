@@ -21,6 +21,7 @@ class GameRunner(EventEmitter):
         self.time_per_turn = time_per_turn
         self.board = None
         self.timer: Timer = Timer(START_TIME_PER_TURN)
+        self.is_running = False
         self.timer.timeout.connect(self.run_turn)
 
     def create_board(self):
@@ -32,16 +33,31 @@ class GameRunner(EventEmitter):
                 bacteria,
                 location)
 
-    def start(self):
-        if not (self.timer and self.timer.is_alive()):
-            self.fire_event(ON_TURN_FINISHED, self.board)
-            self.timer.start()
+    def toggle_play_pause(self, start: bool = True):
+        if start:
+            self.__start()
+        else:
+            self.__pause()
+        self.is_running = start
 
-    def pause(self):
-        if (self.timer and self.timer.is_alive()):
+    def change_speed(self, speed: int):
+        self.time_per_turn = round(START_TIME_PER_TURN / speed)
+        self.timer.interval = round(START_TIME_PER_TURN / speed)
+
+        if (self.is_running):
             self.timer.stop()
+            self.timer.start()
 
     def run_turn(self):
         updated_board = self.turn_runner.run_turn(self.board)
         self.board = updated_board
         self.fire_event(ON_TURN_FINISHED, updated_board)
+
+    def __start(self):
+        if not (self.is_running):
+            self.fire_event(ON_TURN_FINISHED, self.board)
+            self.timer.start()
+
+    def __pause(self):
+        if (self.is_running):
+            self.timer.stop()
