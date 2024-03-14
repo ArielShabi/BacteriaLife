@@ -1,6 +1,5 @@
-QPushButton {    
+QPushButton {
     background-color: #F0F0F0;
-    /* border: 1px solid #202020; */
     border-radius: 5px;
 }
 
@@ -10,4 +9,23 @@ QPushButton:checked {
 
 QPushButton:hover {
     background-color: #BFEFFF;
+}
+
+
+QSlider::groove:horizontal {
+    background-color: #E0E0E0;
+    border: 0px solid #424242;
+    height: 10px;
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal {
+    background-color: #0078D7;
+    border: 2px solid #0078D7;
+    width: 16px;
+    height: 20px;
+    line-height: 20px;
+    margin-top: -5px;
+    margin-bottom: -5px;
+    border-radius: 10px;
 }

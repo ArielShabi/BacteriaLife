@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSizePolicy
+from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
@@ -8,9 +8,9 @@ CSS_FILE = "toolbar.css"
 BUTTON_SIZE = 35
 
 
-class ToolbarUI(QHBoxLayout):
-    def __init__(self, parent: QWidget = None):
-        super().__init__(parent)
+class ToolbarUI(QWidget):
+    def __init__(self):
+        super().__init__()
         self.play_icon = QIcon("assets/play.svg")
         self.pause_icon = QIcon("assets/pause.svg")
 
@@ -24,6 +24,9 @@ class ToolbarUI(QHBoxLayout):
             self.play_pause_button.setIcon(self.play_icon)
 
     def initUI(self):
+        layout = QHBoxLayout(self)
+        layout.setAlignment(Qt.AlignLeft)
+
         play_pause_button = QPushButton(icon=self.pause_icon)
         play_pause_button.setCheckable(True)
         play_pause_button.setChecked(True)
@@ -32,5 +35,17 @@ class ToolbarUI(QHBoxLayout):
         self.play_pause_button = play_pause_button
         play_pause_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
 
-        apply_style_sheet_file(play_pause_button, CSS_FILE)
-        self.addWidget(play_pause_button, alignment=Qt.AlignLeft)
+        speed_slider = QSlider(Qt.Horizontal)
+        speed_slider.setRange(1, 10)
+        speed_slider.setValue(1)
+        speed_slider.setFixedWidth(150)
+        
+        self.speed_slider = speed_slider
+
+        layout.setSpacing(20)
+
+        layout.addWidget(play_pause_button)
+        layout.addWidget(speed_slider)
+
+        self.setLayout(layout)
+        apply_style_sheet_file(self, CSS_FILE)

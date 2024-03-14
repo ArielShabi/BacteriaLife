@@ -28,10 +28,7 @@ class MainWindow(QMainWindow):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
-        widget = QWidget()
-        toolbar = ToolbarUI(widget)
+        toolbar = ToolbarUI()
 
-        widget.show()
-
-        layout.addWidget(widget, alignment=Qt.AlignTop)
+        layout.addWidget(toolbar)
         layout.addWidget(self.board_ui, alignment=Qt.AlignCenter)
