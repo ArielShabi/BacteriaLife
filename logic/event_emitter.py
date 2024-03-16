@@ -12,6 +12,6 @@ class EventEmitter:
     def remove_listener(self, event_name: str, listener: Callable):
         self.listeners[event_name].remove(listener)
 
-    def fire_event(self, event_name: str, data):
+    def fire_event(self, event_name: str, data: any = None):
         for listener in self.listeners[event_name]:
             listener(data)

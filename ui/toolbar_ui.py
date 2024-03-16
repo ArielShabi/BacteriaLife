@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider, QDialog
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
-from logic.event_emitter import EventEmitter
+from logic.game_runner import ON_PAUSE_PLAY_TOGGLE, GameRunner
 from models.settings import Settings
 from ui.settings_modal import SettingsModal
 from ui.utils import apply_style_sheet_file
@@ -17,39 +17,38 @@ ON_SPEED_CHANGE = "on_speed_change"
 ON_SETTINGS_CHANGE = "on_settings_change"
 
 
-class ToolbarUI(QWidget, EventEmitter):
-    def __init__(self, settings: Settings):
+class ToolbarUI(QWidget):
+    def __init__(self, game: GameRunner):
         super().__init__()
         self.play_icon = QIcon("assets/play.svg")
         self.pause_icon = QIcon("assets/pause.svg")
         self.settings_icon = QIcon("assets/cog.svg")
-        self.settings = settings
+        self.settings = game.settings
+        self.game = game
 
         self.initUI()
 
-    def togglePlayPause(self, is_checked: bool):
-        self.play_pause_button.setChecked(is_checked)
-        if is_checked:
-            self.play_pause_button.setIcon(self.pause_icon)
-        else:
-            self.play_pause_button.setIcon(self.play_icon)
+        self.game.add_listener(ON_PAUSE_PLAY_TOGGLE,
+                               self.__on_play_pause_changed)
 
-        self.fire_event(ON_PLAY_PAUSE, is_checked)
+    def toggle_play_pause(self, is_checked: bool):
+        self.game.toggle_play_pause(is_checked)
 
     def settings_button_clicked(self):
         settingsModal = SettingsModal(self.settings)
         is_running = self.play_pause_button.isChecked()
+
         if is_running:
-            self.togglePlayPause(False)
+            self.toggle_play_pause(False)
 
         results = settingsModal.exec_()
 
         if results == QDialog.Accepted:
             self.settings = settingsModal.settings
-            self.fire_event(ON_SETTINGS_CHANGE, self.settings)
+            self.game.on_settings_change(self.settings)
 
         if is_running:
-            self.togglePlayPause(True)
+            self.toggle_play_pause(True)
 
     def initUI(self):
         layout = QHBoxLayout(self)
@@ -58,7 +57,7 @@ class ToolbarUI(QWidget, EventEmitter):
         play_pause_button = QPushButton(icon=self.play_icon)
         play_pause_button.setCheckable(True)
 
-        play_pause_button.clicked.connect(self.togglePlayPause)
+        play_pause_button.clicked.connect(self.toggle_play_pause)
         play_pause_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.play_pause_button = play_pause_button
         play_pause_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
@@ -68,8 +67,7 @@ class ToolbarUI(QWidget, EventEmitter):
         speed_slider.setRange(1, MAX_SLIDER_VALUE)
         speed_slider.setValue(1)
         speed_slider.setFixedWidth(SLIDER_SIZE)
-        speed_slider.valueChanged.connect(
-            lambda value: self.fire_event(ON_SPEED_CHANGE, value))
+        speed_slider.valueChanged.connect(self.game.change_speed)
 
         self.speed_slider = speed_slider
 
@@ -88,3 +86,11 @@ class ToolbarUI(QWidget, EventEmitter):
 
         self.setLayout(layout)
         apply_style_sheet_file(self, CSS_FILE)
+
+    def __on_play_pause_changed(self, is_playing: bool):
+        self.play_pause_button.setChecked(is_playing)
+
+        if is_playing:
+            self.play_pause_button.setIcon(self.pause_icon)
+        else:
+            self.play_pause_button.setIcon(self.play_icon)

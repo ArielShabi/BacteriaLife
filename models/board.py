@@ -37,6 +37,12 @@ class Board(BoardData):
                           for b, locations in self.bacterias if b.id != bacteria_id]
         return True
 
+    def load_board_data(self, board_data: BoardData) -> None:
+        self.width = board_data.width
+        self.height = board_data.height
+        self.bacterias = board_data.bacterias
+        self.foods = board_data.foods
+
     def add_food(self, food, location: Location) -> bool:
         if self.__is_out_of_bounds(location) or self.is_occupied([location]):
             return False
