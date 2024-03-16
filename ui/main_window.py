@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt, QSize
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_saver import HistorySaver
 from ui.board_ui import BoardUi
+from ui.history_slider_ui import HistorySliderUI
 from ui.toolbar_ui import ON_PLAY_PAUSE, ON_SETTINGS_CHANGE, ON_SPEED_CHANGE, ToolbarUI
 from ui.utils import apply_style_sheet_file
 
@@ -35,6 +36,8 @@ class MainWindow(QMainWindow):
             )
         )
         apply_style_sheet_file(self, CSS_FILE)
+        
+        history_slider = HistorySliderUI()
 
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -42,6 +45,8 @@ class MainWindow(QMainWindow):
 
         layout.addWidget(self.toolbar)
         layout.addWidget(self.board_ui)
+        layout.addWidget(history_slider)
+        
 
     def connect_events(self):
         self.game.add_listener(ON_TURN_FINISHED, self.board_ui.update_board)
