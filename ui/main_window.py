@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
         self.game = GameRunner()
         self.game.create_board()
         self.board_ui = BoardUi(self.game.board)
-        self.toolbar = ToolbarUI()
+        self.toolbar = ToolbarUI(self.game.settings)
         self.initUI()
 
         self.connect_events()

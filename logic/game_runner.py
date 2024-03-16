@@ -7,6 +7,7 @@ from logic.event_emitter import EventEmitter
 from logic.turn_runner import TurnRunner
 from models.board import Board
 from models.food import Food
+from models.settings import Settings
 
 BOARD_WIDTH = 100
 BOARD_HEIGHT = 100
@@ -17,12 +18,14 @@ ON_TURN_FINISHED = "on_turn_finished"
 class GameRunner(EventEmitter):
     def __init__(self, time_per_turn=1):
         super().__init__()
-        self.turn_runner = TurnRunner(5)
+        self.turn_number = 0
+        self.turn_runner = TurnRunner(3)
         self.time_per_turn = time_per_turn
         self.board = None
         self.timer: Timer = Timer(START_TIME_PER_TURN)
         self.is_running = False
         self.timer.timeout.connect(self.run_turn)
+        self.settings = Settings()
 
     def create_board(self):
         self.board = Board(BOARD_WIDTH, BOARD_HEIGHT)
@@ -51,6 +54,8 @@ class GameRunner(EventEmitter):
     def run_turn(self):
         updated_board = self.turn_runner.run_turn(self.board)
         self.board = updated_board
+        self.turn_number += 1
+
         self.fire_event(ON_TURN_FINISHED, updated_board)
 
     def __start(self):
