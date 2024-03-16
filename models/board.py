@@ -1,18 +1,13 @@
 from typing import Union
 from models.bacteria import Bacteria
 from models.bacteria_properties import BacteriaProperties
+from models.board_data import BoardData
 from models.food import Food
 from models.models_types import BoardObject
 from project_types import Location
 
 
-class Board:
-    def __init__(self, width: int, height: int):
-        self.width: int = width
-        self.height: int = height
-        self.bacterias: list[tuple[Bacteria, Location]] = []
-        self.foods: list[tuple[Food, Location]] = []
-
+class Board(BoardData):
     def get_cell_content(self, location: Location) -> BoardObject:
         if (self.__is_out_of_bounds(location)):
             return None

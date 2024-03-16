@@ -1,28 +1,27 @@
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QSizePolicy
-from PyQt5.QtSvg import QGraphicsSvgItem
 from PyQt5.QtCore import Qt
 
 
 from models.board import Board
-from models.food import Food
+from models.board_data import BoardData
 from ui.bacteria_ui import BacteriaUI
 from ui.food_ui import FoodUI
 
 
 class BoardUi(QGraphicsView):
-    def __init__(self, board: Board):
+    def __init__(self, board: BoardData):
         super().__init__()
         self.board = board
         self.initUI()
 
     def initUI(self):
         self.scene: QGraphicsScene = QGraphicsScene()
+        #TODO: move to css file
         self.setStyleSheet("border: 1px solid black;")
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.setScene(self.scene)
         self.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
-
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

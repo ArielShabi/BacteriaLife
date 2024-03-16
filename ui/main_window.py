@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QStyle, QApplicat
 from PyQt5.QtCore import Qt, QSize
 
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
+from logic.history_saver import HistorySaver
 from ui.board_ui import BoardUi
 from ui.toolbar_ui import ON_PLAY_PAUSE, ON_SETTINGS_CHANGE, ON_SPEED_CHANGE, ToolbarUI
 from ui.utils import apply_style_sheet_file
@@ -16,6 +17,7 @@ class MainWindow(QMainWindow):
         self.game.create_board()
         self.board_ui = BoardUi(self.game.board)
         self.toolbar = ToolbarUI(self.game.settings)
+        self.history_saver = HistorySaver()
         self.initUI()
 
         self.connect_events()
@@ -43,6 +45,7 @@ class MainWindow(QMainWindow):
 
     def connect_events(self):
         self.game.add_listener(ON_TURN_FINISHED, self.board_ui.update_board)
+        self.game.add_listener(ON_TURN_FINISHED, self.history_saver.save_turn)
         self.toolbar.add_listener(
             ON_PLAY_PAUSE, self.game.toggle_play_pause)
         self.toolbar.add_listener(ON_SPEED_CHANGE, self.game.change_speed)
