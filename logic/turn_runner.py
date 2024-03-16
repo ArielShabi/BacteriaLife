@@ -1,4 +1,5 @@
 import copy
+import math
 import uuid
 from const import ENERGY_FOR_FOOD, START_ENERGY
 from helpers.random_generator import generate_random_location
@@ -11,12 +12,11 @@ from project_types import Location
 
 
 class TurnRunner:
-    def __init__(self, food_per_turn) -> None:
+    def __init__(self, food_per_turn: int) -> None:
         self.food_per_turn = food_per_turn
-        self.x = False
 
-    def run_turn(self, board: Board) -> Board:
-        self.__generate_food(board)
+    def run_turn(self, board: Board, turn_number: int) -> Board:
+        self.__generate_food(board, turn_number)
         self.__play_bacterias(board)
         self.__duplicate_bacterias(board)
         self.__natural_selection(board)
@@ -42,10 +42,12 @@ class TurnRunner:
 
             board.update_bacteria(bacteria.id, bacteria, new_location)
 
-    def __generate_food(self, board: Board):
-        # board.foods = []
+    def __generate_food(self, board: Board, turn_number: int):
+        # if food_per_turn is a fraction, we will generate food every 1/food_per_turn turns
+        if self.food_per_turn < 1 and turn_number % int(1/(self.food_per_turn)) != 0:
+            return
 
-        food_placed = self.food_per_turn
+        food_placed = math.ceil(self.food_per_turn)
 
         while (food_placed > 0):
             location = generate_random_location(board.width, board.height)
@@ -58,7 +60,6 @@ class TurnRunner:
         for bacteria, _ in board.bacterias:
             if bacteria.energy < START_ENERGY * 2:
                 continue
-
 
             child_bacteria = copy.deepcopy(bacteria)
             child_bacteria.energy = START_ENERGY

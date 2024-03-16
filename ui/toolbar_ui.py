@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider
+from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider, QDialog
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
@@ -14,6 +14,7 @@ MAX_SLIDER_VALUE = 30
 
 ON_PLAY_PAUSE = "on_play_pause"
 ON_SPEED_CHANGE = "on_speed_change"
+ON_SETTINGS_CHANGE = "on_settings_change"
 
 
 class ToolbarUI(QWidget, EventEmitter):
@@ -27,6 +28,7 @@ class ToolbarUI(QWidget, EventEmitter):
         self.initUI()
 
     def togglePlayPause(self, is_checked: bool):
+        self.play_pause_button.setChecked(is_checked)
         if is_checked:
             self.play_pause_button.setIcon(self.pause_icon)
         else:
@@ -36,13 +38,24 @@ class ToolbarUI(QWidget, EventEmitter):
 
     def settings_button_clicked(self):
         settingsModal = SettingsModal(self.settings)
-        settingsModal.exec_()
+        is_running = self.play_pause_button.isChecked()
+        if is_running:
+            self.togglePlayPause(False)
+
+        results = settingsModal.exec_()
+
+        if results == QDialog.Accepted:
+            self.settings = settingsModal.settings
+            self.fire_event(ON_SETTINGS_CHANGE, self.settings)
+
+        if is_running:
+            self.togglePlayPause(True)
 
     def initUI(self):
         layout = QHBoxLayout(self)
         layout.setAlignment(Qt.AlignLeft)
 
-        play_pause_button = QPushButton(icon=self.pause_icon)
+        play_pause_button = QPushButton(icon=self.play_icon)
         play_pause_button.setCheckable(True)
 
         play_pause_button.clicked.connect(self.togglePlayPause)

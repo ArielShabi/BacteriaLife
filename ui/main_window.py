@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt, QSize
 
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from ui.board_ui import BoardUi
-from ui.toolbar_ui import ON_PLAY_PAUSE, ON_SPEED_CHANGE, ToolbarUI
+from ui.toolbar_ui import ON_PLAY_PAUSE, ON_SETTINGS_CHANGE, ON_SPEED_CHANGE, ToolbarUI
 from ui.utils import apply_style_sheet_file
 
 CSS_FILE = "main_window.css"
@@ -46,3 +46,5 @@ class MainWindow(QMainWindow):
         self.toolbar.add_listener(
             ON_PLAY_PAUSE, self.game.toggle_play_pause)
         self.toolbar.add_listener(ON_SPEED_CHANGE, self.game.change_speed)
+        self.toolbar.add_listener(
+            ON_SETTINGS_CHANGE, self.game.on_settings_change)

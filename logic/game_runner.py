@@ -18,14 +18,14 @@ ON_TURN_FINISHED = "on_turn_finished"
 class GameRunner(EventEmitter):
     def __init__(self, time_per_turn=1):
         super().__init__()
+        self.settings = Settings()
         self.turn_number = 0
-        self.turn_runner = TurnRunner(3)
+        self.turn_runner = TurnRunner(self.settings.food_per_turn)
         self.time_per_turn = time_per_turn
         self.board = None
         self.timer: Timer = Timer(START_TIME_PER_TURN)
         self.is_running = False
         self.timer.timeout.connect(self.run_turn)
-        self.settings = Settings()
 
     def create_board(self):
         self.board = Board(BOARD_WIDTH, BOARD_HEIGHT)
@@ -52,11 +52,15 @@ class GameRunner(EventEmitter):
             self.timer.start()
 
     def run_turn(self):
-        updated_board = self.turn_runner.run_turn(self.board)
+        updated_board = self.turn_runner.run_turn(self.board, self.turn_number)
         self.board = updated_board
         self.turn_number += 1
 
         self.fire_event(ON_TURN_FINISHED, updated_board)
+
+    def on_settings_change(self, settings: Settings):
+        self.settings = settings
+        self.turn_runner.food_per_turn = settings.food_per_turn
 
     def __start(self):
         if not (self.is_running):
