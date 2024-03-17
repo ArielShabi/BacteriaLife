@@ -2,8 +2,6 @@ import copy
 from models.board import Board
 from models.board_data import BoardData
 
-ON_TURN_SAVED = "on_turn_saved"
-
 
 class HistorySaver():
     def __init__(self):

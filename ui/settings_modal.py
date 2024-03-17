@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QSlider, 
 from PyQt5.QtCore import Qt
 
 from models.settings import Settings
-from ui.components.UnevenStepSlider import UnevenStepSlider
+from ui.components.uneven_step_slider import UnevenStepSlider
 
 MAX_SLIDER_VALUE = 10
 SLIDER_SIZE = 150

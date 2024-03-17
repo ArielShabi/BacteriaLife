@@ -2,10 +2,13 @@ from PyQt5.QtWidgets import QWidget, QSlider, QHBoxLayout, QLabel
 from PyQt5.QtCore import Qt
 
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
-from logic.history_saver import ON_TURN_SAVED, HistorySaver
+from logic.history_saver import HistorySaver
 from ui.utils import apply_style_sheet_file
 
-CSS_FILE = "filled_slider.css"
+CSS_FILES = [
+    "filled_slider.css",
+    "history_slider.css"
+]
 
 LABEL_WIDTH = 150
 
@@ -39,8 +42,18 @@ class HistorySliderUI(QWidget):
         layout.addWidget(self.slider)
         layout.addWidget(self.slider_label)
 
+        self.slider.enterEvent = lambda _: self.slider.setStyleSheet(
+            self.slider.styleSheet() +
+            "QSlider::handle:horizontal {background-color: #0078D7;border-color: #0078D7;}"
+        )
+
+        self.slider.leaveEvent = lambda _: self.slider.setStyleSheet(
+            self.slider.styleSheet().replace(
+                "QSlider::handle:horizontal {background-color: #0078D7;border-color: #0078D7;}", "")
+        )
+
         self.setLayout(layout)
-        apply_style_sheet_file(self, CSS_FILE)
+        apply_style_sheet_file(self, CSS_FILES)
 
     def __on_turn_finished(self, _):
         total_turns = self.game.live_turn_number
@@ -55,8 +68,8 @@ class HistorySliderUI(QWidget):
 
     def __on_slider_change(self, value: int):
         self.slider_label.setText(f"{value}/{self.slider.maximum()}")
-        self.game.start_run_from_history(value)
         self.update_board(self.game.board)
 
     def __on_slider_released(self):
+        self.game.start_run_from_history(self.slider.value())
         self.game.toggle_play_pause(self.__pause_value_before_slider_pressed)
