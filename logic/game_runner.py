@@ -84,8 +84,6 @@ class GameRunner(EventEmitter):
         self.history_runner.turn = from_turn
         self.board = self.history_runner.get_turn(self.board, False)
 
-        self.fire_event(ON_TURN_FINISHED, self.board)
-
     def __start(self):
         if not (self.is_running):
             self.fire_event(ON_TURN_FINISHED, self.board)
