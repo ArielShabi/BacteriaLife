@@ -46,7 +46,7 @@ class HistorySliderUI(QWidget):
         total_turns = self.game.live_turn_number
         current_turn = self.game.history_runner.turn if self.game.running_from_history else total_turns
         self.slider_label.setText(f"{current_turn}/{total_turns}")
-        self.slider.setRange(1, total_turns)
+        self.slider.setRange(0, total_turns)
         self.slider.setValue(current_turn)
 
     def __on_slider_pressed(self):
