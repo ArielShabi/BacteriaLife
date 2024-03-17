@@ -3,7 +3,6 @@ from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
 from logic.game_runner import ON_PAUSE_PLAY_TOGGLE, GameRunner
-from models.settings import Settings
 from ui.settings_modal import SettingsModal
 from ui.utils import apply_style_sheet_file
 
@@ -11,10 +10,6 @@ CSS_FILE = "toolbar.css"
 BUTTON_SIZE = 35
 SLIDER_SIZE = 200
 MAX_SLIDER_VALUE = 30
-
-ON_PLAY_PAUSE = "on_play_pause"
-ON_SPEED_CHANGE = "on_speed_change"
-ON_SETTINGS_CHANGE = "on_settings_change"
 
 
 class ToolbarUI(QWidget):

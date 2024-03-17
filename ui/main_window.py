@@ -6,8 +6,8 @@ from logic.history_runner import HistoryRunner
 from logic.history_saver import HistorySaver
 from models.board_data import BoardData
 from ui.board_ui import BoardUi
-from ui.history_slider_ui import ON_HISTORY_SLIDER_CHANGE, ON_HISTORY_SLIDER_RELEASED, HistorySliderUI
-from ui.toolbar_ui import ON_PLAY_PAUSE, ON_SETTINGS_CHANGE, ON_SPEED_CHANGE, ToolbarUI
+from ui.history_slider_ui import HistorySliderUI
+from ui.toolbar_ui import ToolbarUI
 from ui.utils import apply_style_sheet_file
 
 CSS_FILE = "main_window.css"

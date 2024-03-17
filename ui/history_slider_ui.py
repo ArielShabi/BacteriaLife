@@ -1,17 +1,13 @@
 from PyQt5.QtWidgets import QWidget, QSlider, QHBoxLayout, QLabel
 from PyQt5.QtCore import Qt
 
-from logic.event_emitter import EventEmitter
 from logic.game_runner import GameRunner
 from logic.history_saver import ON_TURN_SAVED, HistorySaver
 from ui.utils import apply_style_sheet_file
 
-CSS_FILE = "history_slider.css"
+CSS_FILE = "filled_slider.css"
 
 LABEL_WIDTH = 150
-
-ON_HISTORY_SLIDER_CHANGE = "on_history_slider_change"
-ON_HISTORY_SLIDER_RELEASED = "on_history_slider_released"
 
 
 class HistorySliderUI(QWidget):
