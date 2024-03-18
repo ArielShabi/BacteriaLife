@@ -23,5 +23,5 @@ class BacteriaUI(QGraphicsSvgItem):
         self.setScale(min(scale_factor_x, scale_factor_y))
 
         colorize_effect = QGraphicsColorizeEffect()
-        colorize_effect.setColor(get_bacteria_color(bacteria))
+        colorize_effect.setColor(get_bacteria_color(bacteria.properties))
         self.setGraphicsEffect(colorize_effect)

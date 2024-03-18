@@ -1,5 +1,9 @@
 from typing import Union
 from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon, QPainter, QPixmap, QColor
+from PyQt5.QtSvg import QSvgRenderer
+
 
 STYLE_SHEETS_ROOT_FOLDER = "ui/stylesheets/"
 
@@ -16,3 +20,15 @@ def apply_style_sheet_file(widget: QWidget, filename: Union[str, list[str]]):
             style_sheet += fh.read()
 
     widget.setStyleSheet(style_sheet)
+
+
+def createColoredIcon(svg_path, color):
+    renderer = QSvgRenderer(svg_path)
+    pixmap = QPixmap(renderer.defaultSize())
+    pixmap.fill(Qt.transparent)
+    painter = QPainter(pixmap)
+    renderer.render(painter)
+    painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
+    painter.fillRect(pixmap.rect(), QColor(color))
+    painter.end()
+    return QIcon(pixmap)

@@ -22,12 +22,6 @@ class Board(BoardData):
 
         return self.cells[location[1]][location[0]]
 
-    def get_range_content(self, start_location: Location, end_location: Location) -> list[list[BoardObject]]:
-        if (self.__is_out_of_bounds(start_location) or self.__is_out_of_bounds(end_location)):
-            return None
-
-        return [row[start_location[0]:end_location[0]+1] for row in self.cells[start_location[1]:end_location[1]+1]]
-
     def add_bacteria(self, bacteria: Bacteria, start_location: Location) -> bool:
         if (self.is_occupied(start_location)):
             return False

@@ -10,13 +10,17 @@ from project_types import Location
 
 
 def get_random_bacterias(board_width, board_height, amount=10) -> list[tuple[Bacteria, Location]]:
-    return [(Bacteria(uuid.uuid4(), START_ENERGY,
-                      BacteriaProperties(
+    return [(get_random_bacteria(),
+             generate_random_location(board_width, board_height)
+             )
+            for _ in range(amount)]
+
+
+def get_random_bacteria() -> Bacteria:
+    return Bacteria(uuid.uuid4(), START_ENERGY,
+                    BacteriaProperties(
         f"name_{uuid.uuid4()}", random.randint(
             1, MAX_BACTERIA_SPEED), random.randint(
             1, MAX_BACTERIA_SENSE)),
-        seek_food_strategy
-    ),
-        generate_random_location(board_width, board_height)
+        random_strategy
     )
-        for _ in range(amount)]

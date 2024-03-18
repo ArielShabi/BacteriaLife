@@ -1,12 +1,17 @@
-from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider, QDialog
+from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider, QDialog, QSizePolicy, QSpacerItem
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
 from logic.game_runner import ON_PAUSE_PLAY_TOGGLE, GameRunner
+from ui.components.slider_with_icon import SliderWithButton
 from ui.settings_modal import SettingsModal
 from ui.utils import apply_style_sheet_file
 
-CSS_FILE = "toolbar.css"
+CSS_FILES = [
+    "filled_slider.css",
+    "toolbar.css",
+]
+
 BUTTON_SIZE = 35
 SLIDER_SIZE = 200
 MAX_SLIDER_VALUE = 30
@@ -17,7 +22,6 @@ class ToolbarUI(QWidget):
         super().__init__()
         self.play_icon = QIcon("assets/play.svg")
         self.pause_icon = QIcon("assets/pause.svg")
-        self.settings_icon = QIcon("assets/cog.svg")
         self.settings = game.settings
         self.game = game
 
@@ -66,7 +70,18 @@ class ToolbarUI(QWidget):
 
         self.speed_slider = speed_slider
 
-        settings_button = QPushButton(icon=self.settings_icon)
+        speed_slider_container = SliderWithButton(
+            speed_slider, QIcon("assets/speed.svg"))
+
+        mutation_slider = QSlider(Qt.Horizontal)
+        mutation_slider.setRange(1, MAX_SLIDER_VALUE)
+        mutation_slider.setValue(1)
+        mutation_slider.setFixedWidth(SLIDER_SIZE)
+
+        mutation_slider_container = SliderWithButton(
+            mutation_slider, QIcon("assets/dna.svg"))
+
+        settings_button = QPushButton(icon=QIcon("assets/cog.svg"))
         settings_button.setIconSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
         settings_button.clicked.connect(self.settings_button_clicked)
         settings_button.setCursor(QCursor(Qt.PointingHandCursor))
@@ -76,11 +91,14 @@ class ToolbarUI(QWidget):
         layout.setSpacing(20)
 
         layout.addWidget(play_pause_button)
-        layout.addWidget(speed_slider)
+        layout.addWidget(speed_slider_container)
+        layout.addWidget(mutation_slider_container)
+        spacer = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        layout.addItem(spacer)
         layout.addWidget(settings_button, alignment=Qt.AlignRight)
 
         self.setLayout(layout)
-        apply_style_sheet_file(self, CSS_FILE)
+        apply_style_sheet_file(self, CSS_FILES)
 
     def __on_play_pause_changed(self, is_playing: bool):
         self.play_pause_button.setChecked(is_playing)

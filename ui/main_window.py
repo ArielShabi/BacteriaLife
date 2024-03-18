@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QStyle, QApplication
 from PyQt5.QtCore import Qt, QSize
 
+from helpers.color import get_bacteria_color
+from logic.bacteria_creator import get_random_bacteria
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_runner import HistoryRunner
 from logic.history_saver import HistorySaver
@@ -8,7 +10,7 @@ from models.board_data import BoardData
 from ui.board_ui import BoardUi
 from ui.history_slider_ui import HistorySliderUI
 from ui.toolbar_ui import ToolbarUI
-from ui.utils import apply_style_sheet_file
+from ui.utils import apply_style_sheet_file, createColoredIcon
 
 CSS_FILE = "main_window.css"
 
@@ -33,6 +35,8 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle("Bacteria Game")
+        self.__set_icon()
+
         self.setGeometry(
             QStyle.alignedRect(
                 Qt.LeftToRight,
@@ -59,3 +63,8 @@ class MainWindow(QMainWindow):
                 self.history_saver.save_turn(board)
 
         self.game.add_listener(ON_TURN_FINISHED, on_turn_finished)
+
+    def __set_icon(self):
+        random_bacteria = get_random_bacteria()
+        color = get_bacteria_color(random_bacteria.properties)
+        self.setWindowIcon(createColoredIcon("assets/bacteria.svg", color))
