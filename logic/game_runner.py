@@ -14,6 +14,7 @@ BOARD_HEIGHT = 100
 
 ON_TURN_FINISHED = "on_turn_finished"
 ON_PAUSE_PLAY_TOGGLE = "on_pause_play_toggle"
+ON_GAME_OVER = "on_game_over"
 
 
 class GameRunner(EventEmitter):
@@ -57,6 +58,10 @@ class GameRunner(EventEmitter):
             self.timer.stop()
             self.timer.start()
 
+    def update_board(self, board: Board):
+        self.board = board
+        self.fire_event(ON_TURN_FINISHED, board)
+
     def run_turn(self):
         updated_board = None
 
@@ -74,6 +79,10 @@ class GameRunner(EventEmitter):
         self.board = updated_board
 
         self.fire_event(ON_TURN_FINISHED, updated_board)
+
+        if len(self.board.bacterias) == 0:
+            self.toggle_play_pause(False)
+            self.fire_event(ON_GAME_OVER, updated_board)
 
     def on_settings_change(self, settings: Settings):
         self.settings = settings

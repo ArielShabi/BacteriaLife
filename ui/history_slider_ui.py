@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_saver import HistorySaver
+from ui.jump_to_turn_button import JumpToTurnButton
 from ui.utils import apply_style_sheet_file
 
 CSS_FILES = [
@@ -28,8 +29,8 @@ class HistorySliderUI(QWidget):
         layout = QHBoxLayout(self)
         self.slider = QSlider(Qt.Horizontal)
 
-        self.slider.setRange(1, 1)
-        self.slider.setValue(1)
+        self.slider.setRange(0, 0)
+        self.slider.setValue(0)
 
         self.slider.sliderPressed.connect(self.__on_slider_pressed)
         self.slider.sliderMoved.connect(self.__on_slider_change)
@@ -39,8 +40,12 @@ class HistorySliderUI(QWidget):
         self.slider_label.setFixedWidth(LABEL_WIDTH)
         self.slider_label.setAlignment(Qt.AlignCenter)
 
+        self.goto_button = JumpToTurnButton(
+            self.slider.maximum, self.game, self.history_saver)        
+
         layout.addWidget(self.slider)
         layout.addWidget(self.slider_label)
+        layout.addWidget(self.goto_button)
 
         self.slider.enterEvent = lambda _: self.slider.setStyleSheet(
             self.slider.styleSheet() +
@@ -59,7 +64,7 @@ class HistorySliderUI(QWidget):
         total_turns = self.game.live_turn_number
         current_turn = self.game.history_runner.turn if self.game.running_from_history else total_turns
         self.slider_label.setText(f"{current_turn}/{total_turns}")
-        self.slider.setRange(0, total_turns)
+        self.slider.setRange(0, total_turns)        
         self.slider.setValue(current_turn)
 
     def __on_slider_pressed(self):
@@ -68,7 +73,8 @@ class HistorySliderUI(QWidget):
 
     def __on_slider_change(self, value: int):
         self.slider_label.setText(f"{value}/{self.slider.maximum()}")
-        self.update_board(self.game.board)
+        board = self.history_saver.get_turn(self.slider.value())
+        self.update_board(board)
 
     def __on_slider_released(self):
         self.game.start_run_from_history(self.slider.value())

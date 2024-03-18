@@ -14,6 +14,5 @@ def apply_style_sheet_file(widget: QWidget, filename: Union[str, list[str]]):
     for file in filenames:
         with open(STYLE_SHEETS_ROOT_FOLDER + file, "r") as fh:
             style_sheet += fh.read()
-            
-    widget.setStyleSheet(style_sheet)    
 
+    widget.setStyleSheet(style_sheet)
