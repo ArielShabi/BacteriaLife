@@ -34,13 +34,16 @@ class TurnRunner:
             new_location = utils.sum_locations(
                 bacteria_location, direction)
 
-            if (board.is_food(new_location)):
+            new_location_content = board.get_cell_content(new_location)
+
+            if (isinstance(new_location_content, Food)):
                 food = board.remove_food(new_location)
                 bacteria.energy += food.energy
 
             bacteria.energy -= bacteria.energy_per_turn()
 
-            board.update_bacteria(bacteria.id, bacteria, new_location)
+            if new_location_content is None:
+                board.update_bacteria(bacteria.id, bacteria, new_location)
 
     def __generate_food(self, board: Board, turn_number: int):
         # if food_per_turn is a fraction, we will generate food every 1/food_per_turn turns

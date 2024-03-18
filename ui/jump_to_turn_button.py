@@ -35,6 +35,8 @@ class JumpToTurnButton(QWidget):
 
     def open_popover(self):
         if not self.popover_dialog:
+            self.__pause_value_before_slider_pressed = self.game.is_running
+            self.game.toggle_play_pause(False)
             self.popover_dialog = QDialog(self)
             self.popover_dialog.setWindowTitle("Go to Turn")
 
@@ -66,6 +68,9 @@ class JumpToTurnButton(QWidget):
             cancel_button.clicked.connect(self.cancel_input)
             buttons_layout.addWidget(cancel_button)
 
+            self.popover_dialog.finished.connect(
+                lambda: self.game.toggle_play_pause(self.__pause_value_before_slider_pressed))
+            
             layout.addLayout(buttons_layout)
 
         self.popover_dialog.show()
