@@ -22,7 +22,7 @@ class GameRunner(EventEmitter):
         super().__init__()
         self.settings = Settings()
         self.live_turn_number = 0
-        self.turn_runner = TurnRunner(self.settings.food_per_turn)
+        self.turn_runner = TurnRunner(self.settings)
         self.history_runner = history_runner
         self.time_per_turn = time_per_turn
         self.board = None

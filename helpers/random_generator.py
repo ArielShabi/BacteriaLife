@@ -13,3 +13,14 @@ def generate_random_location(width: int, height: int) -> Location:
 def generate_random_vector(amplitude: int) -> Vector:
     direction = tuple([random.randint(-1, 1) for _ in range(VECTOR_SIZE)])
     return set_vector_length(direction, amplitude)
+
+
+def random_event_occurred(change_rate: float) -> bool:
+    return random.random() < change_rate
+
+
+def alter_value(value: int, change_value: int, min_value: int, max_value: int) -> int:
+    while True:
+        new_value = value + random.randint(-change_value, change_value)
+        if new_value >= min_value and new_value <= max_value and new_value != value:
+            return new_value

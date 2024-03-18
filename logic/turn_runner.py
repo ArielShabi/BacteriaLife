@@ -1,9 +1,10 @@
 import copy
 import math
 import uuid
-from const import ENERGY_FOR_FOOD, START_ENERGY
-from helpers.random_generator import generate_random_location
+from const import ENERGY_FOR_FOOD, MAX_BACTERIA_SENSE, MAX_BACTERIA_SPEED, START_ENERGY, MUTATION_CHANGE
+from helpers.random_generator import alter_value, generate_random_location, random_event_occurred
 from models.food import Food
+from models.settings import Settings
 import utils
 from models.bacteria import Bacteria
 from models.board import Board
@@ -12,8 +13,8 @@ from project_types import Location
 
 
 class TurnRunner:
-    def __init__(self, food_per_turn: int) -> None:
-        self.food_per_turn = food_per_turn
+    def __init__(self, settings: Settings) -> None:
+        self.settings = settings
 
     def run_turn(self, board: Board, turn_number: int) -> Board:
         self.__generate_food(board, turn_number)
@@ -47,10 +48,12 @@ class TurnRunner:
 
     def __generate_food(self, board: Board, turn_number: int):
         # if food_per_turn is a fraction, we will generate food every 1/food_per_turn turns
-        if self.food_per_turn < 1 and turn_number % int(1/(self.food_per_turn)) != 0:
+        food_per_turn = self.settings.food_per_turn
+
+        if food_per_turn < 1 and turn_number % int(1/(food_per_turn)) != 0:
             return
 
-        food_placed = math.ceil(self.food_per_turn)
+        food_placed = math.ceil(food_per_turn)
 
         while (food_placed > 0):
             location = generate_random_location(board.width, board.height)
@@ -74,6 +77,7 @@ class TurnRunner:
                 location = generate_random_location(board.width, board.height)
                 if not board.is_occupied(location):
                     break
+            self.__mutate_bacteria(child_bacteria)
             board.add_bacteria(child_bacteria, location)
 
     def __get_bacteria_area_of_sense(self, bacteria: Bacteria, bacteria_location: Location, board: Board) -> list[list[BoardObject]]:
@@ -99,6 +103,15 @@ class TurnRunner:
             for x in range(start_location[0], end_location[0]+1)]
 
         return area_of_sense
+
+    def __mutate_bacteria(self, bacteria: Bacteria):
+        mutation_rate = self.settings.mutation_rate
+
+        if random_event_occurred(mutation_rate):
+            bacteria.properties.speed = alter_value(
+                bacteria.properties.speed, MUTATION_CHANGE, 1, MAX_BACTERIA_SPEED)
+            bacteria.properties.sense = alter_value(
+                bacteria.properties.sense, MUTATION_CHANGE, 1, MAX_BACTERIA_SENSE)
 
     def __natural_selection(self, board: Board):
         for bacteria, _ in board.bacterias:
