@@ -50,7 +50,7 @@ class Board(BoardData):
 
         self.__init_cells()
 
-    def add_food(self, food, location: Location) -> bool:
+    def add_food(self, food: Food, location: Location) -> bool:
         if self.is_occupied(location):
             return False
         self.foods.append((food, location))

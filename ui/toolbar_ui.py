@@ -88,6 +88,10 @@ class ToolbarUI(QWidget):
         self.settings_button = settings_button
         settings_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
 
+        self.graph_button = QPushButton(icon=QIcon("assets/graph.svg"))
+        self.graph_button.setIconSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
+        self.graph_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
+
         layout.setSpacing(20)
 
         layout.addWidget(play_pause_button)
@@ -95,6 +99,7 @@ class ToolbarUI(QWidget):
         layout.addWidget(mutation_slider_container)
         spacer = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
         layout.addItem(spacer)
+        layout.addWidget(self.graph_button)
         layout.addWidget(settings_button, alignment=Qt.AlignRight)
 
         self.setLayout(layout)

@@ -3,6 +3,7 @@ import math
 import uuid
 from const import ENERGY_FOR_FOOD, MAX_BACTERIA_SENSE, MAX_BACTERIA_SPEED, START_ENERGY, MUTATION_CHANGE
 from helpers.random_generator import alter_value, generate_random_location, random_event_occurred
+from models.bacteria_properties import BacteriaProperties
 from models.food import Food
 from models.settings import Settings
 import utils
@@ -43,7 +44,7 @@ class TurnRunner:
 
             bacteria.energy -= bacteria.energy_per_turn()
 
-            if new_location_content is None:
+            if not isinstance(new_location_content, BacteriaProperties):
                 board.update_bacteria(bacteria.id, bacteria, new_location)
 
     def __generate_food(self, board: Board, turn_number: int):

@@ -41,7 +41,7 @@ class HistorySliderUI(QWidget):
         self.slider_label.setAlignment(Qt.AlignCenter)
 
         self.goto_button = JumpToTurnButton(
-            self.slider.maximum, self.game, self.history_saver)        
+            self.slider.maximum, self.game, self.history_saver)
 
         layout.addWidget(self.slider)
         layout.addWidget(self.slider_label)
@@ -64,7 +64,7 @@ class HistorySliderUI(QWidget):
         total_turns = self.game.live_turn_number
         current_turn = self.game.history_runner.turn if self.game.running_from_history else total_turns
         self.slider_label.setText(f"{current_turn}/{total_turns}")
-        self.slider.setRange(0, total_turns)        
+        self.slider.setRange(0, total_turns)
         self.slider.setValue(current_turn)
 
     def __on_slider_pressed(self):
@@ -72,6 +72,7 @@ class HistorySliderUI(QWidget):
         self.game.toggle_play_pause(False)
 
     def __on_slider_change(self, value: int):
+        # Add debounce
         self.slider_label.setText(f"{value}/{self.slider.maximum()}")
         board = self.history_saver.get_turn(self.slider.value())
         self.update_board(board)
