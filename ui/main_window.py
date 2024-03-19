@@ -23,13 +23,12 @@ class MainWindow(QMainWindow):
         game = GameRunner(history_runner=HistoryRunner(history_saver))
         self.simulation_page = SimulationPage(
             self.go_to_graph_page, history_saver, game)
-        self.graph_page = GraphPage(history_saver, game)
+        self.graph_page = GraphPage(
+            self.go_to_simulation_page, history_saver, game)
         self.stackedWidget = QStackedWidget()
         self.setCentralWidget(self.stackedWidget)
         self.stackedWidget.addWidget(self.simulation_page)
         self.stackedWidget.addWidget(self.graph_page)
-        self.graph_page.go_back_button.clicked.connect(
-            self.go_to_simulation_page)
 
     def go_to_simulation_page(self):
         self.stackedWidget.setCurrentIndex(0)

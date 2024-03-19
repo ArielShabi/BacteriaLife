@@ -29,6 +29,9 @@ class AverageStatsGraph(AbstractGraph):
     def update_data(self):
         turns = self.history.turns
 
+        if len(turns) == 0:
+            return
+
         average_speed, average_sense = zip(*[
             self.__get_turn_average_stats(turn) for turn in turns
         ])

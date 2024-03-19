@@ -18,6 +18,9 @@ class PopulationSizeGraph(AbstractGraph):
     def update_data(self):
         turns = self.history.turns
 
+        if len(turns) == 0:
+            return
+
         population_size = [len(turn.bacterias) for turn in turns]
 
         self.population_size_graph.setXRange(1, len(turns))

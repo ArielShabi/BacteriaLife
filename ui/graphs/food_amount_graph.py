@@ -18,6 +18,9 @@ class FoodAmountGraph(AbstractGraph):
     def update_data(self):
         turns = self.history.turns
 
+        if len(turns) == 0:
+            return
+
         food_amount = [len(turn.foods) for turn in turns]
 
         self.food_amount_graph.setXRange(1, len(turns))

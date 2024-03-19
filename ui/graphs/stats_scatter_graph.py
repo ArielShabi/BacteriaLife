@@ -28,6 +28,9 @@ class StatsScatterGraph(AbstractGraph):
         return self.stats_graph
 
     def update_data(self):
+        if len(self.history.turns) == 0:
+            return
+
         last_turn = self.history.turns[-1]
         bacterias = [bacteria for bacteria, _ in last_turn.bacterias]
 

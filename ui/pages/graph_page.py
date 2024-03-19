@@ -1,6 +1,8 @@
-import pyqtgraph as pg
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QGridLayout
+from typing import Callable
+from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
+from PyQt5.QtGui import QIcon
 
+from const import BUTTON_SIZE
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_saver import HistorySaver
 from ui.graphs.abstract_graph import AbstractGraph
@@ -13,9 +15,11 @@ DARK_GRAPH_BACKGROUND = "#444444"
 
 
 class GraphPage(QWidget):
-    def __init__(self, history_saver: HistorySaver, game: GameRunner):
+    def __init__(self, change_page: Callable, history_saver: HistorySaver, game: GameRunner):
         super().__init__()
-        # FIX can be empty
+        
+        self.change_page = change_page
+        
         self.history = history_saver
         self.graphs: list[AbstractGraph] = [
             PopulationSizeGraph(history_saver),
@@ -29,7 +33,9 @@ class GraphPage(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.go_back_button = QPushButton("Graph")
+        self.go_back_button = QPushButton(icon=QIcon("assets/back.svg"))
+        self.go_back_button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
+        self.go_back_button.clicked.connect(self.change_page)
         self.grid = QGridLayout()
 
         self.grid.addWidget(self.go_back_button, 0, 0)
