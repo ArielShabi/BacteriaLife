@@ -34,24 +34,20 @@ class StatsScatterGraph(AbstractGraph):
         spots = []
 
         def reduce_stats(stats_bacterias_dict: dict[tuple[int, int], int], bacteria: Bacteria) -> dict:
-            stats_bacterias_dict[(bacteria.properties.speed,
-                                  bacteria.properties.sense)] += 1
+            stats_bacterias_dict[(bacteria.properties.sense,
+                                  bacteria.properties.speed)] += 1
             return stats_bacterias_dict
 
         stats_bacterias = functools.reduce(
             reduce_stats, bacterias, defaultdict(int))
 
         for stats, amount in stats_bacterias.items():
-            # creating  spot position which get updated after each iteration
-            # of color which also get updated
-
             spot_dic = {'pos': (stats), 'size': DOT_SIZE_FACTOR*(amount**0.5),
-                        'brush': get_bacteria_color(*stats)}
+                        'brush': get_bacteria_color(stats[1], stats[0])}
             spots.append(spot_dic)
 
         def tooltip(x, y, data):
-            print(x, y, data)
-            return f"""Speed: {int(x)}, Sense: {int(y)} amount: {data[(x, y)]}"""
+            return f"""Sense: {int(x)}, Speed: {int(y)} amount: {data[(x, y)]}"""
 
         self.scatter_plot.setData(spots,
                                   data=stats_bacterias,
