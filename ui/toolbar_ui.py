@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider, QDialog,
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
+from const import DEFAULT_MUTATION_RATE
 from logic.game_runner import ON_PAUSE_PLAY_TOGGLE, GameRunner
 from ui.components.slider_with_icon import SliderWithButton
 from ui.settings_modal import SettingsModal
@@ -44,7 +45,7 @@ class ToolbarUI(QWidget):
 
         if results == QDialog.Accepted:
             self.settings = settingsModal.settings
-            self.game.on_settings_change(self.settings)
+            self.game.change_settings(self.settings)
 
         if is_running:
             self.toggle_play_pause(True)
@@ -74,9 +75,10 @@ class ToolbarUI(QWidget):
             speed_slider, QIcon("assets/speed.svg"))
 
         mutation_slider = QSlider(Qt.Horizontal)
-        mutation_slider.setRange(1, MAX_SLIDER_VALUE)
-        mutation_slider.setValue(1)
+        mutation_slider.setRange(0, 10)
+        mutation_slider.setValue(round(DEFAULT_MUTATION_RATE*10))
         mutation_slider.setFixedWidth(SLIDER_SIZE)
+        mutation_slider.valueChanged.connect(self.__change_mutation_rate)
 
         mutation_slider_container = SliderWithButton(
             mutation_slider, QIcon("assets/dna.svg"))
@@ -104,6 +106,10 @@ class ToolbarUI(QWidget):
 
         self.setLayout(layout)
         apply_style_sheet_file(self, CSS_FILES)
+
+    def __change_mutation_rate(self, value: int):
+        self.settings.mutation_rate = value/10
+        self.game.change_settings(self.settings)
 
     def __on_play_pause_changed(self, is_playing: bool):
         self.play_pause_button.setChecked(is_playing)

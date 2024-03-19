@@ -84,9 +84,9 @@ class GameRunner(EventEmitter):
             self.toggle_play_pause(False)
             self.fire_event(ON_GAME_OVER, updated_board)
 
-    def on_settings_change(self, settings: Settings):
+    def change_settings(self, settings: Settings):
         self.settings = settings
-        self.turn_runner.food_per_turn = settings.food_per_turn
+        self.turn_runner.settings = settings
 
     def start_run_from_history(self, from_turn: int):
         self.running_from_history = True
