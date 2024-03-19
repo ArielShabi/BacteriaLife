@@ -21,6 +21,9 @@ class AverageStatsGraph(AbstractGraph):
         self.sense_plot = self.average_stats_graph.plot(name='Avg Sense')
         self.sense_plot.setPen(SENSE_COLOR)
 
+        self.average_stats_graph.setYRange(
+            0, max(MAX_BACTERIA_SPEED, MAX_BACTERIA_SENSE))
+
         return self.average_stats_graph
 
     def update_data(self):
@@ -31,8 +34,6 @@ class AverageStatsGraph(AbstractGraph):
         ])
 
         self.average_stats_graph.setXRange(1, len(turns))
-        self.average_stats_graph.setYRange(
-            0, max(MAX_BACTERIA_SPEED, MAX_BACTERIA_SENSE))
 
         self.speed_plot.setData(list(range(len(turns))), average_speed)
         self.sense_plot.setData(list(range(len(turns))), average_sense)
@@ -40,6 +41,9 @@ class AverageStatsGraph(AbstractGraph):
     def __get_turn_average_stats(self, turn: BoardData) -> tuple[float, float]:
         speed = 0
         sense = 0
+
+        if not turn.bacterias:
+            return 0, 0
 
         for bacteria, _ in turn.bacterias:
             speed += bacteria.properties.speed
