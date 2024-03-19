@@ -67,12 +67,12 @@ class ToolbarUI(QWidget):
         speed_slider.setRange(1, MAX_SLIDER_VALUE)
         speed_slider.setValue(1)
         speed_slider.setFixedWidth(SLIDER_SIZE)
-        speed_slider.valueChanged.connect(self.game.change_speed)                
+        speed_slider.valueChanged.connect(self.game.change_speed)
 
         self.speed_slider = speed_slider
 
         speed_slider_container = SliderWithButton(
-            speed_slider, QIcon("assets/speed.svg"), "Speed")
+            speed_slider, QIcon("assets/speed.svg"), "Speed", lambda value: f"x{value}")
 
         mutation_slider = QSlider(Qt.Horizontal)
         mutation_slider.setObjectName("mutation_slider")
@@ -82,7 +82,7 @@ class ToolbarUI(QWidget):
         mutation_slider.valueChanged.connect(self.__change_mutation_rate)
 
         mutation_slider_container = SliderWithButton(
-            mutation_slider, QIcon("assets/dna.svg"), "Mutation Rate")
+            mutation_slider, QIcon("assets/dna.svg"), "Mutation Rate", lambda value: f"{value*10}%")
 
         settings_button = QPushButton(icon=QIcon("assets/cog.svg"))
         settings_button.setIconSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
