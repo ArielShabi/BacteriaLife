@@ -4,12 +4,12 @@ from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon, QMovie
 
 
+from const import BUTTON_SIZE
 from logic.auto_simulation_runner import AutoSimulationRunner
 from logic.game_runner import GameRunner
 from logic.history_saver import HistorySaver
 from models.board import Board
 
-BUTTON_SIZE = 35
 DEFAULT_MAX = 3000
 LOADING_GIF = "assets/Hourglass.gif"
 

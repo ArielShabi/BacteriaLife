@@ -11,10 +11,22 @@ QPushButton:hover {
     background-color: #BFEFFF;
 }
 
+#speed_slider::handle:horizontal {
+    background-color: #FFA500;
+    border-color: #FFA500;
+}
 
-QSlider::groove:horizontal {
-    background-color: #E0E0E0;
-    border: 0px solid #424242;
-    height: 10px;
-    border-radius: 4px;
+#speed_slider::sub-page:horizontal {
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #FFA500, stop:1 #FF4500);
+    border-color: #FFA500;
+}
+
+#mutation_slider::handle:horizontal {
+    background-color: #BA55D3;
+    border-color: #BA55D3;
+}
+
+#mutation_slider::sub-page:horizontal {
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #BA55D3, stop:1 #800080);
+    border-color: #BA55D3;
 }

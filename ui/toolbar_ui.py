@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider, QDialog,
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
-from const import DEFAULT_MUTATION_RATE
+from const import BUTTON_SIZE, DEFAULT_MUTATION_RATE
 from logic.game_runner import ON_PAUSE_PLAY_TOGGLE, GameRunner
 from ui.components.slider_with_icon import SliderWithButton
 from ui.settings_modal import SettingsModal
@@ -13,7 +13,6 @@ CSS_FILES = [
     "toolbar.css",
 ]
 
-BUTTON_SIZE = 35
 SLIDER_SIZE = 200
 MAX_SLIDER_VALUE = 30
 
@@ -63,25 +62,27 @@ class ToolbarUI(QWidget):
         play_pause_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
 
         speed_slider = QSlider(Qt.Horizontal)
+        speed_slider.setObjectName("speed_slider")
 
         speed_slider.setRange(1, MAX_SLIDER_VALUE)
         speed_slider.setValue(1)
         speed_slider.setFixedWidth(SLIDER_SIZE)
-        speed_slider.valueChanged.connect(self.game.change_speed)
+        speed_slider.valueChanged.connect(self.game.change_speed)                
 
         self.speed_slider = speed_slider
 
         speed_slider_container = SliderWithButton(
-            speed_slider, QIcon("assets/speed.svg"))
+            speed_slider, QIcon("assets/speed.svg"), "Speed")
 
         mutation_slider = QSlider(Qt.Horizontal)
+        mutation_slider.setObjectName("mutation_slider")
         mutation_slider.setRange(0, 10)
         mutation_slider.setValue(round(DEFAULT_MUTATION_RATE*10))
         mutation_slider.setFixedWidth(SLIDER_SIZE)
         mutation_slider.valueChanged.connect(self.__change_mutation_rate)
 
         mutation_slider_container = SliderWithButton(
-            mutation_slider, QIcon("assets/dna.svg"))
+            mutation_slider, QIcon("assets/dna.svg"), "Mutation Rate")
 
         settings_button = QPushButton(icon=QIcon("assets/cog.svg"))
         settings_button.setIconSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
