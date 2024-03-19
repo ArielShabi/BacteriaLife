@@ -10,6 +10,7 @@ from ui.utils import createColoredIcon
 
 CSS_FILE = "main_window.css"
 
+DARK_BACKGROUND = "#333333"
 
 class MainWindow(QMainWindow):
     def __init__(self):
