@@ -1,11 +1,10 @@
 from typing import Callable
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QStyle, QApplication, QPushButton
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QStyle, QApplication
 from PyQt5.QtCore import Qt, QSize
 
 from helpers.color import get_bacteria_color
 from logic.bacteria_creator import get_random_bacteria
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
-from logic.history_runner import HistoryRunner
 from logic.history_saver import HistorySaver
 from models.board_data import BoardData
 from ui.board_ui import BoardUi
@@ -17,11 +16,10 @@ CSS_FILE = "main_window.css"
 
 
 class SimulationPage(QWidget):
-    def __init__(self, change_page: Callable, history_saver: HistorySaver):
+    def __init__(self, change_page: Callable, history_saver: HistorySaver, game: GameRunner):
         super().__init__()
         self.history_saver = history_saver
-        self.history_runner = HistoryRunner(self.history_saver)
-        self.game = GameRunner(self.history_runner)
+        self.game = game
         self.game.create_board()
         self.board_ui = BoardUi(self.game.board)
         self.toolbar = ToolbarUI(self.game)

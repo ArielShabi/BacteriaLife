@@ -1,6 +1,7 @@
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QGridLayout
 
+from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_saver import HistorySaver
 from ui.graphs.abstract_graph import AbstractGraph
 from ui.graphs.average_stats_graph import AverageStatsGraph
@@ -12,7 +13,7 @@ DARK_GRAPH_BACKGROUND = "#444444"
 
 
 class GraphPage(QWidget):
-    def __init__(self, history_saver: HistorySaver):
+    def __init__(self, history_saver: HistorySaver, game: GameRunner):
         super().__init__()
         # FIX can be empty
         self.history = history_saver
@@ -23,10 +24,11 @@ class GraphPage(QWidget):
             StatsScatterGraph(history_saver)
         ]
 
+        game.add_listener(ON_TURN_FINISHED, lambda _: self.__update_graphs())
+
         self.initUI()
 
     def initUI(self):
-        # self.layout = QVBoxLayout(self)
         self.go_back_button = QPushButton("Graph")
         self.grid = QGridLayout()
 
@@ -41,5 +43,8 @@ class GraphPage(QWidget):
         self.setLayout(self.grid)
 
     def on_page_set(self):
+        self.__update_graphs()
+
+    def __update_graphs(self):
         for graph in self.graphs:
             graph.update_data()

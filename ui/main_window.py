@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import QMainWindow, QStackedWidget
 
 from helpers.color import get_bacteria_color
 from logic.bacteria_creator import get_random_bacteria
+from logic.game_runner import GameRunner
+from logic.history_runner import HistoryRunner
 from logic.history_saver import HistorySaver
 from ui.pages.graph_page import GraphPage
 from ui.pages.simulation_page import SimulationPage
@@ -12,21 +14,25 @@ CSS_FILE = "main_window.css"
 
 DARK_BACKGROUND = "#333333"
 
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
         history_saver = HistorySaver()
-        self.simulation_page = SimulationPage(self.go_to_graph_page, history_saver)
-        self.graph_page = GraphPage(history_saver)
+        game = GameRunner(history_runner=HistoryRunner(history_saver))
+        self.simulation_page = SimulationPage(
+            self.go_to_graph_page, history_saver, game)
+        self.graph_page = GraphPage(history_saver, game)
         self.stackedWidget = QStackedWidget()
         self.setCentralWidget(self.stackedWidget)
         self.stackedWidget.addWidget(self.simulation_page)
         self.stackedWidget.addWidget(self.graph_page)
-        self.graph_page.go_back_button.clicked.connect(self.go_to_simulation_page)
+        self.graph_page.go_back_button.clicked.connect(
+            self.go_to_simulation_page)
 
     def go_to_simulation_page(self):
-        self.stackedWidget.setCurrentIndex(0)        
+        self.stackedWidget.setCurrentIndex(0)
 
     def go_to_graph_page(self):
         self.stackedWidget.setCurrentIndex(1)
