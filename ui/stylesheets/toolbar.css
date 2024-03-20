@@ -30,3 +30,13 @@ QPushButton:hover {
     background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #BA55D3, stop:1 #800080);
     border-color: #BA55D3;
 }
+
+#food_slider::handle:horizontal {
+    background-color: #E53935;
+    border-color: #E53935;
+}
+
+#food_slider::sub-page:horizontal {
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #E53935, stop:1 #9E1D1B);
+    border-color: #E53935;
+}

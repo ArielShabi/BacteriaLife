@@ -2,9 +2,10 @@ from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider, QDialog,
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
-from const import BUTTON_SIZE, DEFAULT_MUTATION_RATE
+from const import BUTTON_SIZE, DEFAULT_FOOD_PER_TURN, DEFAULT_MUTATION_RATE
 from logic.game_runner import ON_PAUSE_PLAY_TOGGLE, GameRunner
 from ui.components.slider_with_icon import SliderWithButton
+from ui.components.uneven_step_slider import UnevenStepSlider
 from ui.settings_modal import SettingsModal
 from ui.utils import apply_style_sheet_file
 
@@ -14,7 +15,9 @@ CSS_FILES = [
 ]
 
 SLIDER_SIZE = 200
-MAX_SLIDER_VALUE = 30
+MAX_SPEED_SLIDER_VALUE = 30
+
+FOOD_PER_TURN_STEPS = [1/3, 1/2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 
 class ToolbarUI(QWidget):
@@ -64,7 +67,7 @@ class ToolbarUI(QWidget):
         speed_slider = QSlider(Qt.Horizontal)
         speed_slider.setObjectName("speed_slider")
 
-        speed_slider.setRange(1, MAX_SLIDER_VALUE)
+        speed_slider.setRange(1, MAX_SPEED_SLIDER_VALUE)
         speed_slider.setValue(1)
         speed_slider.setFixedWidth(SLIDER_SIZE)
         speed_slider.valueChanged.connect(self.game.change_speed)
@@ -84,6 +87,18 @@ class ToolbarUI(QWidget):
         mutation_slider_container = SliderWithButton(
             mutation_slider, QIcon("assets/dna.svg"), "Mutation Rate", lambda value: f"{value*10}%")
 
+        food_slider = UnevenStepSlider(Qt.Horizontal)
+        food_slider.setObjectName("food_slider")
+        food_slider.setSteps(FOOD_PER_TURN_STEPS)
+        food_slider.setValue(DEFAULT_FOOD_PER_TURN)
+
+        food_slider.setFixedWidth(SLIDER_SIZE)
+        food_slider.on_value_changed(self.__change_food_rate)
+
+        food_slider_container = SliderWithButton(
+            food_slider, QIcon("assets/apple.svg"), "Food",
+            lambda value: f"{str(round(value, 2))} per turn", food_slider.on_value_changed)
+
         settings_button = QPushButton(icon=QIcon("assets/cog.svg"))
         settings_button.setIconSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
         settings_button.clicked.connect(self.settings_button_clicked)
@@ -100,6 +115,7 @@ class ToolbarUI(QWidget):
         layout.addWidget(play_pause_button)
         layout.addWidget(speed_slider_container)
         layout.addWidget(mutation_slider_container)
+        layout.addWidget(food_slider_container)
         spacer = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
         layout.addItem(spacer)
         layout.addWidget(self.graph_button)
@@ -110,6 +126,10 @@ class ToolbarUI(QWidget):
 
     def __change_mutation_rate(self, value: int):
         self.settings.mutation_rate = value/10
+        self.game.change_settings(self.settings)
+
+    def __change_food_rate(self, value: int):
+        self.settings.food_per_turn = value
         self.game.change_settings(self.settings)
 
     def __on_play_pause_changed(self, is_playing: bool):

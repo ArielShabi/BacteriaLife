@@ -7,8 +7,6 @@ from ui.components.uneven_step_slider import UnevenStepSlider
 MAX_SLIDER_VALUE = 10
 SLIDER_SIZE = 150
 
-FOOD_PER_TURN_STEPS = [1/3, 1/2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
 
 class SettingsModal(QDialog):
     def __init__(self, settings: Settings, parent=None):
@@ -31,7 +29,7 @@ class SettingsModal(QDialog):
 
         food_per_turn_slider.setValue(self.settings.food_per_turn)
         food_per_turn_slider.setFixedWidth(SLIDER_SIZE)
-        food_per_turn_slider.onValueChanged(self.__set_food_per_turn)
+        food_per_turn_slider.on_value_changed(self.__set_food_per_turn)
         # food_per_turn_slider.valueChanged.connect(self.__set_food_per_turn)
         food_per_turn_label = QLabel(
             f"Food per turn: {self.settings.food_per_turn}")
