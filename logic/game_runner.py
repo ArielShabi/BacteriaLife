@@ -6,11 +6,7 @@ from logic.event_emitter import EventEmitter
 from logic.history_runner import HistoryRunner
 from logic.turn_runner import TurnRunner
 from models.board import Board
-from models.food import Food
 from models.settings import Settings
-
-BOARD_WIDTH = 100
-BOARD_HEIGHT = 100
 
 ON_TURN_FINISHED = "on_turn_finished"
 ON_PAUSE_PLAY_TOGGLE = "on_pause_play_toggle"
@@ -32,8 +28,8 @@ class GameRunner(EventEmitter):
         self.timer.timeout.connect(self.run_turn)
 
     def create_board(self):
-        self.board = Board(BOARD_WIDTH, BOARD_HEIGHT)
-        bacterias = get_random_bacterias(BOARD_WIDTH, BOARD_HEIGHT, 30)
+        self.board = Board(*self.settings.board_size)
+        bacterias = get_random_bacterias(*self.settings.board_size, 30)
 
         for bacteria, location in bacterias:
             self.board.add_bacteria(
@@ -87,6 +83,7 @@ class GameRunner(EventEmitter):
     def change_settings(self, settings: Settings):
         self.settings = settings
         self.turn_runner.settings = settings
+        self.board.resize(*settings.board_size)
 
     def start_run_from_history(self, from_turn: int):
         self.running_from_history = True

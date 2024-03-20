@@ -8,7 +8,8 @@ from project_types import Location
 
 
 class Board(BoardData):
-    def __init__(self, width: int,
+    def __init__(self,
+                 width: int,
                  height: int,
                  bacterias: list[tuple[Bacteria, Location]] = [],
                  foods: list[tuple[Food, Location]] = []) -> None:
@@ -41,6 +42,21 @@ class Board(BoardData):
 
         self.cells[location[1]][location[0]] = None
         return True
+
+    def resize(self, new_width: int, new_height: int) -> None:
+        width_diff = new_width - self.width
+        height_diff = new_height - self.height
+
+        if width_diff > 0:
+            for row in self.cells:
+                row.extend([None for _ in range(width_diff)])
+
+        if height_diff > 0:
+            self.cells.extend([[None for _ in range(new_width)]
+                              for _ in range(height_diff)])
+
+        self.width = new_width
+        self.height = new_height
 
     def load_board_data(self, board_data: BoardData) -> None:
         self.width = board_data.width

@@ -1,7 +1,7 @@
 import copy
 import math
 import uuid
-from const import ENERGY_FOR_FOOD, MAX_BACTERIA_SENSE, MAX_BACTERIA_SPEED, START_ENERGY, MUTATION_CHANGE
+from const import ENERGY_FOR_FOOD, MAX_BACTERIA_SENSE, MAX_BACTERIA_SPEED, START_BOARD_SIZE, START_ENERGY, MUTATION_CHANGE
 from helpers.random_generator import alter_value, generate_random_location, random_event_occurred
 from models.bacteria_properties import BacteriaProperties
 from models.food import Food
@@ -56,11 +56,17 @@ class TurnRunner:
 
         food_placed = math.ceil(food_per_turn)
 
+        board_size = board.width * board.height
+
+        board_size_ratio = board_size / START_BOARD_SIZE
+
+        food_placed = round(food_placed * board_size_ratio)
+
         while (food_placed > 0):
             location = generate_random_location(board.width, board.height)
 
             if (not board.is_occupied(location)):
-                board.add_food(Food("apple", ENERGY_FOR_FOOD), location)
+                board.add_food(Food(ENERGY_FOR_FOOD), location)
                 food_placed -= 1
 
     def __duplicate_bacterias(self,  board: Board):

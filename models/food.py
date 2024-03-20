@@ -1,4 +1,3 @@
 class Food:
-    def __init__(self, name: str, energy: int):
-        self.name = name
+    def __init__(self, energy: int):
         self.energy = energy

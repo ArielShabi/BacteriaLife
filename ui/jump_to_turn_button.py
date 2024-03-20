@@ -1,6 +1,6 @@
 from typing import Callable
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSpinBox, QDialog, QLabel, QHBoxLayout
-from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal
+from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QMovie
 
 

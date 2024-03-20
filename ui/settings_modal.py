@@ -1,8 +1,7 @@
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QSlider, QGridLayout
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QGridLayout, QSpinBox
 from PyQt5.QtCore import Qt
 
 from models.settings import Settings
-from ui.components.uneven_step_slider import UnevenStepSlider
 
 MAX_SLIDER_VALUE = 10
 SLIDER_SIZE = 150
@@ -23,31 +22,34 @@ class SettingsModal(QDialog):
         header_label = QLabel("Choose your settings:")
         layout.addWidget(header_label, alignment=Qt.AlignCenter)
 
-        food_per_turn_slider = UnevenStepSlider(Qt.Horizontal)
+        self.board_width = QSpinBox()
+        self.board_width.setMinimum(0)
+        self.board_width.setMaximum(5000)
+        board_size_label = QLabel("x")
 
-        food_per_turn_slider.setSteps(FOOD_PER_TURN_STEPS)
+        self.board_height = QSpinBox()
+        self.board_height.setMinimum(0)
+        self.board_height.setMaximum(5000)
 
-        food_per_turn_slider.setValue(self.settings.food_per_turn)
-        food_per_turn_slider.setFixedWidth(SLIDER_SIZE)
-        food_per_turn_slider.on_value_changed(self.__set_food_per_turn)
-        # food_per_turn_slider.valueChanged.connect(self.__set_food_per_turn)
-        food_per_turn_label = QLabel(
-            f"Food per turn: {self.settings.food_per_turn}")
-
-        self.food_per_turn_slider = food_per_turn_slider
-        self.food_per_turn_label = food_per_turn_label
+        grid_layout.addWidget(QLabel("Board Size:"), 0, 0)
+        grid_layout.addWidget(self.board_width, 0, 1)
+        grid_layout.addWidget(board_size_label, 0, 2)
+        grid_layout.addWidget(self.board_height, 0, 3)
 
         ok_button = QPushButton("Save")
         ok_button.clicked.connect(self.accept)
-
-        grid_layout.addWidget(food_per_turn_slider, 0, 1)
-        grid_layout.addWidget(food_per_turn_label, 0, 0)
 
         layout.addLayout(grid_layout)
         layout.addWidget(ok_button)
 
         self.setLayout(layout)
 
-    def __set_food_per_turn(self, value: int):
-        self.settings.food_per_turn = value
-        self.food_per_turn_label.setText(f"Food per turn: {value}")
+    def accept(self):
+        self.settings.board_size = (
+            self.board_width.value(), self.board_height.value())
+        super().accept()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.board_width.setValue(self.settings.board_size[0])
+        self.board_height.setValue(self.settings.board_size[1])
