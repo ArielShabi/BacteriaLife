@@ -6,6 +6,9 @@ from models.board import Board
 from models.board_data import BoardData
 from ui.bacteria_ui import BacteriaUI
 from ui.food_ui import FoodUI
+from ui.utils import apply_style_sheet_file
+
+CSS_FILE = "board.css"
 
 
 class BoardUi(QGraphicsView):
@@ -16,10 +19,9 @@ class BoardUi(QGraphicsView):
 
     def initUI(self):
         self.scene: QGraphicsScene = QGraphicsScene()
-        #TODO: move to css file
-        self.setStyleSheet("border: 1px solid black;")
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        apply_style_sheet_file(self, CSS_FILE)
         self.setScene(self.scene)
         self.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
 
