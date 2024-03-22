@@ -1,9 +1,12 @@
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QSizePolicy
 from PyQt5.QtCore import Qt
+from PyQt5.QtSvg import QGraphicsSvgItem
 
 
 from models.board import Board
 from models.board_data import BoardData
+from models.food import Food
+from project_types import Location
 from ui.bacteria_ui import BacteriaUI
 from ui.food_ui import FoodUI
 from ui.utils import apply_style_sheet_file
@@ -41,25 +44,25 @@ class BoardUi(QGraphicsView):
 
             bacteria_ui = BacteriaUI(bacteria, width_offset, height_offset)
 
-            max_x = self.rect().width()-bacteria_ui.scale() * \
-                bacteria_ui.boundingRect().width()
-            max_y = self.rect().height()-bacteria_ui.scale() * \
-                bacteria_ui.boundingRect().height()
-            bacteria_x = min(max_x, width_offset * bacteria_location[1])
-            bacteria_y = min(max_y,  height_offset * bacteria_location[0])
-            self.scene.addItem(bacteria_ui)
-            bacteria_ui.setPos(
-                bacteria_x, bacteria_y)
+            self.__add_item(width_offset, height_offset,
+                            bacteria_location, bacteria_ui)
 
         for food, location in self.board.foods:
             food_ui = FoodUI(food, width_offset, height_offset)
+            self.__add_item(width_offset, height_offset, location, food_ui)
 
-            max_x = self.rect().width()-food_ui.scale() * \
-                food_ui.boundingRect().width()
-            max_y = self.rect().height()-food_ui.scale() * \
-                food_ui.boundingRect().height()
-            food_x = min(max_x, width_offset * location[1])
-            food_y = min(max_y, height_offset * location[0])
-            self.scene.addItem(food_ui)
-            food_ui.setPos(
-                food_x, food_y)
+        if (self.board.magic_door):
+            food_ui = FoodUI(Food(999), width_offset, height_offset)
+            self.__add_item(width_offset, height_offset,
+                            self.board.magic_door, food_ui)
+
+    def __add_item(self, width_offset: float, height_offset: float, location: Location, svg: QGraphicsSvgItem):
+        max_x = self.rect().width()-svg.scale() * \
+            svg.boundingRect().width()
+        max_y = self.rect().height()-svg.scale() * \
+            svg.boundingRect().height()
+        bacteria_x = min(max_x, width_offset * location[1])
+        bacteria_y = min(max_y,  height_offset * location[0])
+        self.scene.addItem(svg)
+        svg.setPos(
+            bacteria_x, bacteria_y)

@@ -28,4 +28,6 @@ def neon_color(color: QColor) -> QColor:
 
 
 def get_food_color(food: Food) -> QColor:
+    if (food.energy == 999):
+        return QColor(0, 255, 0)
     return QColor(255, 0, 0)

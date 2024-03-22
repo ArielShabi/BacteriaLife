@@ -8,9 +8,10 @@ class BoardData:
                  width: int,
                  height: int,
                  bacterias: list[tuple[Bacteria, Location]] = [],
-                 foods: list[tuple[Food, Location]] = []
-                 ):
+                 foods: list[tuple[Food, Location]] = [],
+                 magic_door: Location = None):
         self.width = width
         self.height = height
         self.bacterias = bacterias
         self.foods = foods
+        self.magic_door = magic_door

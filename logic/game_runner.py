@@ -84,6 +84,7 @@ class GameRunner(EventEmitter):
         self.settings = settings
         self.turn_runner.settings = settings
         self.board.resize(*settings.board_size)
+        self.board.magic_door = settings.magic_door
 
     def start_run_from_history(self, from_turn: int):
         self.running_from_history = True
