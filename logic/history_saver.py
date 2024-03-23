@@ -19,5 +19,6 @@ class HistorySaver():
             board.width,
             board.height,
             copy.deepcopy(board.bacterias),
-            copy.deepcopy(board.foods)
+            copy.deepcopy(board.foods),
+            copy.deepcopy(board.magic_door)
         )
