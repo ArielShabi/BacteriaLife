@@ -1,6 +1,8 @@
+from datetime import datetime
 from typing import Callable
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import Qt
 
 from const import BUTTON_SIZE
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
@@ -17,9 +19,9 @@ DARK_GRAPH_BACKGROUND = "#444444"
 class GraphPage(QWidget):
     def __init__(self, change_page: Callable, history_saver: HistorySaver, game: GameRunner):
         super().__init__()
-        
+
         self.change_page = change_page
-        
+
         self.history = history_saver
         self.graphs: list[AbstractGraph] = [
             PopulationSizeGraph(history_saver),
@@ -36,17 +38,32 @@ class GraphPage(QWidget):
         self.go_back_button = QPushButton(icon=QIcon("assets/back.svg"))
         self.go_back_button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
         self.go_back_button.clicked.connect(self.change_page)
-        self.grid = QGridLayout()
+        
+        self.download_button = QPushButton(icon=QIcon("assets/download.svg"))
+        self.download_button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
+        self.download_button.clicked.connect(self.__save_graphs_to_file)
+        
+        self.page_grid = QGridLayout()
 
-        self.grid.addWidget(self.go_back_button, 0, 0)
+        self.setLayout(self.page_grid)
+
+        self.page_grid.addWidget(self.go_back_button, 0, 0)
+        self.page_grid.addWidget(self.download_button, 0, 1, alignment=Qt.AlignRight)
+
+        graph_grid = QGridLayout()
 
         for i in range(len(self.graphs)):
             graph_creator = self.graphs[i]
             graph_widget = graph_creator.create_graph()
             graph_widget.setBackground(DARK_GRAPH_BACKGROUND)
-            self.grid.addWidget(graph_widget, 1+(i//2), i % 2)
+            graph_grid.addWidget(graph_widget, (i//2), i % 2)
 
-        self.setLayout(self.grid)
+        self.graphs_container = QWidget()
+        self.graphs_container.setLayout(graph_grid)
+
+        self.page_grid.addWidget(self.graphs_container, 1, 0, 1, 2)
+
+        self.setLayout(self.page_grid)
 
     def on_page_set(self):
         self.__update_graphs()
@@ -54,3 +71,13 @@ class GraphPage(QWidget):
     def __update_graphs(self):
         for graph in self.graphs:
             graph.update_data()
+
+    def __save_graphs_to_file(self):
+        geometry = self.graphs_container.geometry()
+
+        pixmap = QPixmap(geometry.size())
+
+        self.graphs_container.render(pixmap)
+
+        pixmap.save(f'graphs_{datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S.%f")}', 'JPG')
