@@ -21,13 +21,18 @@ def get_bacteria_color(speed: int, sense: int) -> QColor:
 
 
 def neon_color(color: QColor) -> QColor:
+    r, g, b, _ = color.getRgb()
 
-    color.setHsv(color.hue(), 255, 255)
+    neon_r = min(255, r + 100)
+    neon_g = max(0, g - 50)
+    neon_b = max(0, b - 50)
 
-    return color
+    return QColor(neon_r, neon_g, neon_b)
 
 
 def get_food_color(food: Food) -> QColor:
-    if (food.energy == 999):
-        return QColor(0, 255, 0)
     return QColor(255, 0, 0)
+
+
+def get_portal_color() -> QColor:
+    return QColor("#00FFC9")

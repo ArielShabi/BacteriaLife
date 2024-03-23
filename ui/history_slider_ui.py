@@ -1,8 +1,10 @@
+from typing import Callable
 from PyQt5.QtWidgets import QWidget, QSlider, QHBoxLayout, QLabel
 from PyQt5.QtCore import Qt
 
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_saver import HistorySaver
+from models.board_data import BoardData
 from ui.jump_to_turn_button import JumpToTurnButton
 from ui.utils import apply_style_sheet_file
 
@@ -15,7 +17,7 @@ LABEL_WIDTH = 150
 
 
 class HistorySliderUI(QWidget):
-    def __init__(self, history_saver: HistorySaver, game: GameRunner, update_board: callable):
+    def __init__(self, history_saver: HistorySaver, game: GameRunner, update_board: Callable[[BoardData], None]):
         super().__init__()
 
         self.history_saver = history_saver

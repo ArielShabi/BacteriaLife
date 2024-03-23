@@ -22,7 +22,7 @@ class SimulationPage(QWidget):
         self.game = game
         self.game.create_board()
         self.board_ui = BoardUi(self.game.board)
-        self.toolbar = ToolbarUI(self.game)
+        self.toolbar = ToolbarUI(self.game, self.board_ui.update_board)
         self.history_slider = HistorySliderUI(
             self.history_saver, self.game, self.board_ui.update_board)
 

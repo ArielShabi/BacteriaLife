@@ -35,8 +35,10 @@ class TurnRunner:
             direction = bacteria.play_turn(bacteria_area_of_sense)
             new_location = utils.sum_locations(
                 bacteria_location, direction)
+            
+            new_location = self.__check_magic_portal(board, bacteria_location, new_location)
 
-            new_location_content = board.get_cell_content(new_location)
+            new_location_content = board.get_cell_content(new_location)            
 
             if (isinstance(new_location_content, Food)):
                 food = board.remove_food(new_location)
@@ -124,3 +126,8 @@ class TurnRunner:
         for bacteria, _ in board.bacterias:
             if bacteria.energy <= 0:
                 board.remove_bacteria(bacteria.id)
+
+    def __check_magic_portal(self, board: Board, bacteria_location: Location, new_location: Location) -> Location:
+        if board.magic_door and utils.is_point_on_line(bacteria_location, new_location, board.magic_door[0]):
+            return board.magic_door[1]
+        return new_location

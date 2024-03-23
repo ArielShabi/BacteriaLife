@@ -1,18 +1,13 @@
 from PyQt5.QtSvg import QGraphicsSvgItem
 from PyQt5.QtWidgets import QGraphicsColorizeEffect
+from PyQt5.QtGui import QColor
 from const import SVG_SIZE
-from helpers.color import get_bacteria_color
 
 
-from models.bacteria import Bacteria
+class BoardItemSvg(QGraphicsSvgItem):
+    def __init__(self, svg_path: str, color: QColor, width_offset: float, height_offset: float):
 
-BACTERIA_SVG = "assets/bacteria.svg"
-
-
-class BacteriaUI(QGraphicsSvgItem):
-    def __init__(self, bacteria: Bacteria, width_offset: float, height_offset: float):
-
-        super().__init__(BACTERIA_SVG)
+        super().__init__(svg_path)
 
         desired_width = SVG_SIZE * width_offset
         desired_height = SVG_SIZE * height_offset
@@ -23,5 +18,6 @@ class BacteriaUI(QGraphicsSvgItem):
         self.setScale(min(scale_factor_x, scale_factor_y))
 
         colorize_effect = QGraphicsColorizeEffect()
-        colorize_effect.setColor(get_bacteria_color(bacteria.properties))
+        colorize_effect.setColor(color)
+
         self.setGraphicsEffect(colorize_effect)

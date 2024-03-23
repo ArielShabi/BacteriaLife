@@ -16,6 +16,20 @@ def get_direction_vector(start: Location, end: Location) -> Location:
 def get_distance(start: Location, end: Location) -> int:
     return ((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2) ** 0.5
 
+def is_point_on_line(start:Location, end:Location, point:Location, tolerance=1e-9):    
+    x1, y1 = start
+    x2, y2 = end
+    x, y = point
+
+    # Check if the point is on the line formed by start and end
+    cross_product = abs((x2 - x1) * (y - y1) - (x - x1) * (y2 - y1))
+    if cross_product <= tolerance:
+        # Check if the point is within the line segment
+        if min(x1, x2) - tolerance <= x <= max(x1, x2) + tolerance and \
+           min(y1, y2) - tolerance <= y <= max(y1, y2) + tolerance:
+            return True
+
+    return False
 
 def clamp_location(location: Location, min_location: Location, max_location: Location) -> Location:
     return (

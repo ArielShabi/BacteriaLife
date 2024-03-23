@@ -3,15 +3,20 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtSvg import QGraphicsSvgItem
 
 
+from helpers.color import get_bacteria_color, get_food_color, get_portal_color
 from models.board import Board
 from models.board_data import BoardData
 from models.food import Food
 from project_types import Location
-from ui.bacteria_ui import BacteriaUI
+from ui.bacteria_ui import BoardItemSvg
 from ui.food_ui import FoodUI
 from ui.utils import apply_style_sheet_file
 
 CSS_FILE = "board.css"
+
+BACTERIA_SVG = "assets/bacteria.svg"
+FOOD_SVG = "assets/apple.svg"
+PORTAL_SVG = "assets/magic-portal.svg"
 
 
 class BoardUi(QGraphicsView):
@@ -34,7 +39,7 @@ class BoardUi(QGraphicsView):
         ).size().width(), self.viewport().size().height())
         self.update_board(self.board)
 
-    def update_board(self, board: Board) -> None:
+    def update_board(self, board: BoardData) -> None:
         self.board = board
         self.scene.clear()
         width_offset = self.rect().width() / self.board.width
@@ -42,27 +47,30 @@ class BoardUi(QGraphicsView):
 
         for bacteria, bacteria_location in self.board.bacterias:
 
-            bacteria_ui = BacteriaUI(bacteria, width_offset, height_offset)
+            bacteria_ui = BoardItemSvg(BACTERIA_SVG, get_bacteria_color(
+                bacteria.properties), width_offset, height_offset)
 
             self.__add_item(width_offset, height_offset,
                             bacteria_location, bacteria_ui)
 
         for food, location in self.board.foods:
-            food_ui = FoodUI(food, width_offset, height_offset)
+            food_ui = BoardItemSvg(FOOD_SVG, get_food_color(
+                food), width_offset, height_offset)
             self.__add_item(width_offset, height_offset, location, food_ui)
 
         if (self.board.magic_door):
-            food_ui = FoodUI(Food(999), width_offset, height_offset)
+            food_ui = BoardItemSvg(
+                PORTAL_SVG, get_portal_color(), width_offset, height_offset)
             self.__add_item(width_offset, height_offset,
-                            self.board.magic_door, food_ui)
+                            self.board.magic_door[0], food_ui)
 
     def __add_item(self, width_offset: float, height_offset: float, location: Location, svg: QGraphicsSvgItem):
         max_x = self.rect().width()-svg.scale() * \
             svg.boundingRect().width()
         max_y = self.rect().height()-svg.scale() * \
             svg.boundingRect().height()
-        bacteria_x = min(max_x, width_offset * location[1])
-        bacteria_y = min(max_y,  height_offset * location[0])
+        item_x = min(max_x, width_offset * location[1])
+        item_y = min(max_y,  height_offset * location[0])
         self.scene.addItem(svg)
         svg.setPos(
-            bacteria_x, bacteria_y)
+            item_x, item_y)

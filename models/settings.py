@@ -10,7 +10,7 @@ class Settings:
                      START_BOARD_WIDTH, START_BOARD_HEIGHT),
                  food_per_turn: int = DEFAULT_FOOD_PER_TURN,
                  mutation_rate: float = DEFAULT_MUTATION_RATE,
-                 magic_door: Location = None
+                 magic_door: tuple[Location, Location] = None
                  ):
         self.board_size = board_size
         self.food_per_turn = food_per_turn

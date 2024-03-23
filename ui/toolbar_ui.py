@@ -1,9 +1,11 @@
+from typing import Callable
 from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QSlider, QDialog, QSizePolicy, QSpacerItem
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
 from const import BUTTON_SIZE, DEFAULT_FOOD_PER_TURN, DEFAULT_MUTATION_RATE
 from logic.game_runner import ON_PAUSE_PLAY_TOGGLE, GameRunner
+from models.board_data import BoardData
 from ui.components.slider_with_icon import SliderWithButton
 from ui.components.uneven_step_slider import UnevenStepSlider
 from ui.settings_modal import SettingsModal
@@ -21,12 +23,13 @@ FOOD_PER_TURN_STEPS = [1/3, 1/2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 
 class ToolbarUI(QWidget):
-    def __init__(self, game: GameRunner):
+    def __init__(self, game: GameRunner, update_board: Callable[[BoardData], None]):
         super().__init__()
         self.play_icon = QIcon("assets/play.svg")
         self.pause_icon = QIcon("assets/pause.svg")
         self.settings = game.settings
         self.game = game
+        self.update_board = update_board
 
         self.initUI()
 
@@ -48,6 +51,7 @@ class ToolbarUI(QWidget):
         if results == QDialog.Accepted:
             self.settings = settingsModal.settings
             self.game.change_settings(self.settings)
+            self.update_board(self.game.board)
 
         if is_running:
             self.toggle_play_pause(True)
