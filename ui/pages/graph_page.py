@@ -38,17 +38,18 @@ class GraphPage(QWidget):
         self.go_back_button = QPushButton(icon=QIcon("assets/back.svg"))
         self.go_back_button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
         self.go_back_button.clicked.connect(self.change_page)
-        
+
         self.download_button = QPushButton(icon=QIcon("assets/download.svg"))
         self.download_button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
         self.download_button.clicked.connect(self.__save_graphs_to_file)
-        
+
         self.page_grid = QGridLayout()
 
         self.setLayout(self.page_grid)
 
         self.page_grid.addWidget(self.go_back_button, 0, 0)
-        self.page_grid.addWidget(self.download_button, 0, 1, alignment=Qt.AlignRight)
+        self.page_grid.addWidget(self.download_button,
+                                 0, 1, alignment=Qt.AlignRight)
 
         graph_grid = QGridLayout()
 
@@ -80,4 +81,4 @@ class GraphPage(QWidget):
         self.graphs_container.render(pixmap)
 
         pixmap.save(f'graphs_{datetime.now().strftime(
-            "%Y-%m-%d %H:%M:%S.%f")}', 'JPG')
+            "%Y-%m-%d %H_%M_%S %f")}.png', 'PNG')
