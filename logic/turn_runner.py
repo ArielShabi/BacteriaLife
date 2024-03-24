@@ -35,13 +35,16 @@ class TurnRunner:
             direction = bacteria.play_turn(bacteria_area_of_sense)
             new_location = utils.sum_locations(
                 bacteria_location, direction)
-            
-            new_location = self.__check_magic_portal(board, bacteria_location, new_location)
 
-            new_location_content = board.get_cell_content(new_location)            
+            new_location = self.__check_magic_portal(
+                board, bacteria_location, new_location)
+
+            new_location_content = board.get_cell_content(new_location)
 
             if (isinstance(new_location_content, Food)):
                 food = board.remove_food(new_location)
+                if (food is None):
+                    continue
                 bacteria.energy += food.energy
 
             bacteria.energy -= bacteria.energy_per_turn()
@@ -78,7 +81,7 @@ class TurnRunner:
 
             child_bacteria = copy.deepcopy(bacteria)
             child_bacteria.energy = START_ENERGY
-            child_bacteria.id = uuid.uuid4()
+            child_bacteria.id = str(uuid.uuid4())
             child_bacteria.properties.name = f"{
                 bacteria.properties.name} c "
             bacteria.energy -= START_ENERGY

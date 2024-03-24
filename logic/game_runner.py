@@ -20,7 +20,7 @@ class GameRunner(EventEmitter):
         self.turn_runner = TurnRunner(self.settings)
         self.history_runner = history_runner
         self.time_per_turn = time_per_turn
-        self.board = None
+        self.board: Board = Board(0, 0)
         self.timer: Timer = Timer(START_TIME_PER_TURN)
         self.is_running = False
         self.running_from_history = False
@@ -88,7 +88,10 @@ class GameRunner(EventEmitter):
     def start_run_from_history(self, from_turn: int):
         self.running_from_history = True
         self.history_runner.turn = from_turn
-        self.board = self.history_runner.get_turn(self.board, False)
+        possible_board = self.history_runner.get_turn(self.board, False)
+
+        if possible_board is not None:
+            self.board = possible_board
 
     def __start(self):
         if not (self.is_running):

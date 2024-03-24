@@ -1,3 +1,4 @@
+from typing import Optional
 from .bacteria import Bacteria
 from .food import Food
 from project_types import Location
@@ -9,7 +10,7 @@ class BoardData:
                  height: int,
                  bacterias: list[tuple[Bacteria, Location]] = [],
                  foods: list[tuple[Food, Location]] = [],
-                 magic_door: Location = None):
+                 magic_door: Optional[tuple[Location, Location]] = None):
         self.width = width
         self.height = height
         self.bacterias = bacterias

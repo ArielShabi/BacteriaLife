@@ -14,6 +14,8 @@ class Board(BoardData):
                  foods: list[tuple[Food, Location]] = []) -> None:
         super().__init__(width, height, bacterias, foods)
 
+        self.cells: list[list[BoardObject]] = []
+
         self.__init_cells()
 
     def get_cell_content(self, location: Location) -> BoardObject:
@@ -34,7 +36,7 @@ class Board(BoardData):
         found_index, location = next(((index, loc) for index, (bacteria, loc) in enumerate(
             self.bacterias) if bacteria.id == bacteria_id), (None, None))
 
-        if found_index is None:
+        if found_index is None or location is None:
             return False
 
         del self.bacterias[found_index]
@@ -45,7 +47,7 @@ class Board(BoardData):
     def resize(self, new_width: int, new_height: int) -> None:
         width_diff = new_width - self.width
         height_diff = new_height - self.height
-        
+
         self.width = new_width
         self.height = new_height
 
@@ -55,18 +57,19 @@ class Board(BoardData):
 
         elif width_diff < 0:
             for row in self.cells:
-                row = row[:new_width]                
+                row = row[:new_width]
 
         if height_diff > 0:
             self.cells.extend([[None for _ in range(new_width)]
                               for _ in range(height_diff)])
         elif height_diff < 0:
             self.cells = self.cells[:new_height]
-            
-        if width_diff < 0 or height_diff < 0:
-            self.bacterias = [(bacteria, location) for bacteria, location in self.bacterias if location[0] < new_width and location[1] < new_height]
-            self.foods = [(food, location) for food, location in self.foods if location[0] < new_width and location[1] < new_height]
 
+        if width_diff < 0 or height_diff < 0:
+            self.bacterias = [(bacteria, location) for bacteria,
+                              location in self.bacterias if location[0] < new_width and location[1] < new_height]
+            self.foods = [(food, location) for food, location in self.foods if location[0]
+                          < new_width and location[1] < new_height]
 
     def load_board_data(self, board_data: BoardData) -> None:
         self.width = board_data.width
@@ -87,7 +90,7 @@ class Board(BoardData):
         (food, index) = next(((f, index) for index, (f, loc)
                               in enumerate(self.foods) if loc == location), (None, None))
 
-        if food is None:
+        if food is None or index is None:
             return None
 
         del self.foods[index]
@@ -110,12 +113,12 @@ class Board(BoardData):
     def __is_out_of_bounds(self, location: Location) -> bool:
         return location[0] < 0 or location[0] >= self.width or location[1] < 0 or location[1] >= self.height
 
-    def __init_cells(self):
-        self.cells: list[list[BoardObject]] = [
-            [None for _ in range(self.width)] for _ in range(self.height)]
+    def __init_cells(self) -> None:
+        self.cells = [
+            [None for _ in range(self.width)] for _ in range(self.height)
+        ]
 
         for self.bacteria, location in self.bacterias:
             self.cells[location[1]][location[0]] = self.bacteria.properties
         for food, location in self.foods:
             self.cells[location[1]][location[0]] = food
-            
