@@ -15,6 +15,5 @@ if __name__ == "__main__":
     app.setStyle(ProxyStyle())
 
     window = MainWindow()
-    app.main_window = window
     window.show()
     sys.exit(app.exec_())
