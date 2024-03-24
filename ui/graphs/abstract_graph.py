@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from pyqtgraph.widgets import GraphicsView
+from pyqtgraph import GraphicsView
 
 from logic.history_saver import HistorySaver
 

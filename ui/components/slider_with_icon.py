@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Optional
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QSlider, QLabel, QSizePolicy, QToolTip
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QSize
@@ -9,13 +9,13 @@ class SliderWithButton(QWidget):
                  slider: QSlider,
                  icon: QIcon,
                  label: str,
-                 tooltip: Callable[[int], str] = None,
-                 on_value_changed: Callable[[
-                     Callable[[int], None]], None] = None
+                 tooltip_function: Optional[Callable[[int], str]] = None,
+                 on_value_changed: Optional[Callable[[
+                     Callable[[int], None]], None]] = None
                  ):
         super().__init__()
         self.initUI(icon, slider, label)
-        self.tooltip_function = tooltip
+        self.tooltip_function = tooltip_function
 
         if (on_value_changed):
             on_value_changed(self.show_slider_value)

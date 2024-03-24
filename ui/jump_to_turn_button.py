@@ -24,7 +24,8 @@ class JumpToTurnButton(QWidget):
         self.game = game
         self.history_saver = history_saver
 
-        self.button = QPushButton(icon=QIcon("assets/hourglass.svg"))
+        self.button = QPushButton()
+        self.button.setIcon(QIcon("assets/hourglass.svg"))
         self.button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
 
         layout.addWidget(self.button)
@@ -107,5 +108,6 @@ class JumpToTurnButton(QWidget):
 
     def simulation_finished(self, board: Board):
         self.game.update_board(board)
-        self.popover_dialog.accept()
+        if self.popover_dialog:
+            self.popover_dialog.accept()
         self.popover_dialog = None

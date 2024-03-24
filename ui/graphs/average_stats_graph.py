@@ -42,8 +42,8 @@ class AverageStatsGraph(AbstractGraph):
         self.sense_plot.setData(list(range(len(turns))), average_sense)
 
     def __get_turn_average_stats(self, turn: BoardData) -> tuple[float, float]:
-        speed = 0
-        sense = 0
+        speed: float = 0
+        sense: float = 0
 
         if not turn.bacterias:
             return 0, 0

@@ -25,23 +25,24 @@ class BoardUi(QGraphicsView):
         self.board = board
         self.initUI()
 
-    def initUI(self):
-        self.scene: QGraphicsScene = QGraphicsScene()
+    def initUI(self) -> None:
+        self.board_scene: QGraphicsScene = QGraphicsScene()
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         apply_style_sheet_file(self, CSS_FILE)
-        self.setScene(self.scene)
-        self.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
+        self.setScene(self.board_scene)
+        self.fitInView(self.board_scene.sceneRect(),
+                       Qt.AspectRatioMode.KeepAspectRatio)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.scene.setSceneRect(0, 0, self.viewport(
+        self.board_scene.setSceneRect(0, 0, self.viewport(
         ).size().width(), self.viewport().size().height())
         self.update_board(self.board)
 
     def update_board(self, board: BoardData) -> None:
         self.board = board
-        self.scene.clear()
+        self.board_scene.clear()
         width_offset = self.rect().width() / self.board.width
         height_offset = self.rect().height() / self.board.height
 
@@ -71,6 +72,6 @@ class BoardUi(QGraphicsView):
             svg.boundingRect().height()
         item_x = min(max_x, width_offset * location[1])
         item_y = min(max_y,  height_offset * location[0])
-        self.scene.addItem(svg)
+        self.board_scene.addItem(svg)
         svg.setPos(
             item_x, item_y)

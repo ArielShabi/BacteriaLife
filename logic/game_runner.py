@@ -71,7 +71,8 @@ class GameRunner(EventEmitter):
                 self.board, self.live_turn_number)
             self.live_turn_number += 1
 
-        self.board = updated_board
+        if updated_board is not None:
+            self.board = updated_board
 
         self.fire_event(ON_TURN_FINISHED, updated_board)
 

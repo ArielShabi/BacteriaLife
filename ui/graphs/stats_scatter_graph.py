@@ -1,6 +1,6 @@
 from collections import defaultdict
 import functools
-from pyqtgraph import PlotWidget, ScatterPlotItem, mkBrush
+from pyqtgraph import PlotWidget, ScatterPlotItem
 
 from const import MAX_BACTERIA_SENSE, MAX_BACTERIA_SPEED
 from helpers.color import get_bacteria_color
