@@ -6,7 +6,7 @@ from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_saver import HistorySaver
 from models.board_data import BoardData
 from ui.jump_to_turn_button import JumpToTurnButton
-from ui.utils import apply_style_sheet_file
+from ui.ui_utils import apply_style_sheet_file
 
 CSS_FILES = [
     "filled_slider.css",

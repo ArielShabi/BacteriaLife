@@ -10,7 +10,7 @@ from models.board_data import BoardData
 from ui.board_ui import BoardUi
 from ui.history_slider_ui import HistorySliderUI
 from ui.toolbar_ui import ToolbarUI
-from ui.utils import apply_style_sheet_file, createColoredIcon
+from ui.ui_utils import apply_style_sheet_file, createColoredIcon
 
 CSS_FILE = "main_window.css"
 

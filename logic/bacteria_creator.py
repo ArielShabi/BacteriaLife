@@ -8,7 +8,7 @@ from models.bacteria_properties import BacteriaProperties
 from project_types import Location
 
 
-def get_random_bacterias(board_width, board_height, amount=10) -> list[tuple[Bacteria, Location]]:
+def get_random_bacterias(board_width: int, board_height: int, amount: int = 10) -> list[tuple[Bacteria, Location]]:
     return [(get_random_bacteria(),
              generate_random_location(board_width, board_height)
              )
@@ -16,7 +16,7 @@ def get_random_bacterias(board_width, board_height, amount=10) -> list[tuple[Bac
 
 
 def get_random_bacteria() -> Bacteria:
-    return Bacteria(uuid.uuid4(), START_ENERGY,
+    return Bacteria(str(uuid.uuid4()), START_ENERGY,
                     BacteriaProperties(
         f"name_{uuid.uuid4()}", random.randint(
             1, MAX_BACTERIA_SPEED), random.randint(

@@ -1,7 +1,6 @@
 from const import START_TIME_PER_TURN
 from helpers.timer import Timer
 from logic.bacteria_creator import get_random_bacterias
-from logic.bacteria_strategies.random_strategy import random_strategy
 from logic.event_emitter import EventEmitter
 from logic.history_runner import HistoryRunner
 from logic.turn_runner import TurnRunner

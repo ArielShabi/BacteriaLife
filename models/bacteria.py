@@ -1,5 +1,5 @@
-from models.bacteria_properties import BacteriaProperties
-from models.models_types import BoardObject
+from .bacteria_properties import BacteriaProperties
+from .models_types import BoardObject
 from project_types import BacteriaStrategy, Vector
 
 

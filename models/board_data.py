@@ -1,5 +1,5 @@
-from models.bacteria import Bacteria
-from models.food import Food
+from .bacteria import Bacteria
+from .food import Food
 from project_types import Location
 
 

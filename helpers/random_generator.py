@@ -11,7 +11,7 @@ def generate_random_location(width: int, height: int) -> Location:
 
 
 def generate_random_vector(amplitude: int) -> Vector:
-    direction = tuple([random.randint(-1, 1) for _ in range(VECTOR_SIZE)])
+    direction = (random.randint(-1, 1), random.randint(-1, 1))
     return set_vector_length(direction, amplitude)
 
 

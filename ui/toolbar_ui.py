@@ -9,7 +9,7 @@ from models.board_data import BoardData
 from ui.components.slider_with_icon import SliderWithButton
 from ui.components.uneven_step_slider import UnevenStepSlider
 from ui.settings_modal import SettingsModal
-from ui.utils import apply_style_sheet_file
+from ui.ui_utils import apply_style_sheet_file
 
 CSS_FILES = [
     "filled_slider.css",

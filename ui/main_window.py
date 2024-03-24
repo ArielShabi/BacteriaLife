@@ -8,7 +8,7 @@ from logic.history_runner import HistoryRunner
 from logic.history_saver import HistorySaver
 from ui.pages.graph_page import GraphPage
 from ui.pages.simulation_page import SimulationPage
-from ui.utils import createColoredIcon
+from ui.ui_utils import createColoredIcon
 
 CSS_FILE = "main_window.css"
 

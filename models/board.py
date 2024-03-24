@@ -1,9 +1,8 @@
 from typing import Union
-from models.bacteria import Bacteria
-from models.bacteria_properties import BacteriaProperties
-from models.board_data import BoardData
-from models.food import Food
-from models.models_types import BoardObject
+from .bacteria import Bacteria
+from .board_data import BoardData
+from .food import Food
+from .models_types import BoardObject
 from project_types import Location
 
 

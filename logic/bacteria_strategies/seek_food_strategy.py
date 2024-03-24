@@ -16,10 +16,9 @@ def seek_food_strategy(area_of_sense: list[list[BoardObject]], bacteria: Bacteri
 
     bacteria_location = next(((x, y)
                              for x in range(len(area_of_sense)) for y in range(len(area_of_sense[0]))
-                             if isinstance(area_of_sense[x][y], BacteriaProperties) and area_of_sense[x][y].name == bacteria.name
-                              ), None)
+                             if (__check_bacteria(area_of_sense[x][y], bacteria))), None)
 
-    if (bacteria_location == None):
+    if (bacteria_location is None):
         # This should never happen
         return generate_random_vector(bacteria.speed)
 
@@ -45,3 +44,10 @@ def seek_food_strategy(area_of_sense: list[list[BoardObject]], bacteria: Bacteri
         vector_length -= 1
 
     return where_to_go
+
+
+def __check_bacteria(board_object: BoardObject, bacteria: BacteriaProperties) -> bool:
+    if (isinstance(board_object, BacteriaProperties)):
+        if board_object.name == bacteria.name:
+            return True
+    return False

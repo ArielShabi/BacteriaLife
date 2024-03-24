@@ -10,7 +10,7 @@ from models.food import Food
 from project_types import Location
 from ui.bacteria_ui import BoardItemSvg
 from ui.food_ui import FoodUI
-from ui.utils import apply_style_sheet_file
+from ui.ui_utils import apply_style_sheet_file
 
 CSS_FILE = "board.css"
 
