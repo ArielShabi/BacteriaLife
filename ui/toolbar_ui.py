@@ -23,7 +23,7 @@ FOOD_PER_TURN_STEPS = [1/3, 1/2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 
 class ToolbarUI(QWidget):
-    def __init__(self, game: GameRunner, update_board: Callable[[BoardData], None]):
+    def __init__(self, game: GameRunner, update_board: Callable[[BoardData], None]) -> None:
         super().__init__()
         self.play_icon = QIcon("assets/play.svg")
         self.pause_icon = QIcon("assets/pause.svg")
@@ -36,10 +36,10 @@ class ToolbarUI(QWidget):
         self.game.add_listener(ON_PAUSE_PLAY_TOGGLE,
                                self.__on_play_pause_changed)
 
-    def toggle_play_pause(self, is_checked: bool):
+    def toggle_play_pause(self, is_checked: bool) -> None:
         self.game.toggle_play_pause(is_checked)
 
-    def settings_button_clicked(self):
+    def settings_button_clicked(self) -> None:
         settingsModal = SettingsModal(self.settings)
         is_running = self.play_pause_button.isChecked()
 
@@ -56,19 +56,20 @@ class ToolbarUI(QWidget):
         if is_running:
             self.toggle_play_pause(True)
 
-    def initUI(self):
+    def initUI(self) -> None:
         layout = QHBoxLayout(self)
-        layout.setAlignment(Qt.AlignLeft)
+        layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        play_pause_button = QPushButton(icon=self.play_icon)
+        play_pause_button = QPushButton()
+        play_pause_button.setIcon(self.play_icon)
         play_pause_button.setCheckable(True)
 
         play_pause_button.clicked.connect(self.toggle_play_pause)
-        play_pause_button.setCursor(QCursor(Qt.PointingHandCursor))
+        play_pause_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.play_pause_button = play_pause_button
         play_pause_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
 
-        speed_slider = QSlider(Qt.Horizontal)
+        speed_slider = QSlider(Qt.Orientation.Horizontal)
         speed_slider.setObjectName("speed_slider")
 
         speed_slider.setRange(1, MAX_SPEED_SLIDER_VALUE)
@@ -81,7 +82,7 @@ class ToolbarUI(QWidget):
         speed_slider_container = SliderWithButton(
             speed_slider, QIcon("assets/speed.svg"), "Speed", lambda value: f"x{value}")
 
-        mutation_slider = QSlider(Qt.Horizontal)
+        mutation_slider = QSlider(Qt.Orientation.Horizontal)
         mutation_slider.setObjectName("mutation_slider")
         mutation_slider.setRange(0, 10)
         mutation_slider.setValue(round(DEFAULT_MUTATION_RATE*10))
@@ -91,7 +92,7 @@ class ToolbarUI(QWidget):
         mutation_slider_container = SliderWithButton(
             mutation_slider, QIcon("assets/dna.svg"), "Mutation Rate", lambda value: f"{value*10}%")
 
-        food_slider = UnevenStepSlider(Qt.Horizontal)
+        food_slider = UnevenStepSlider(Qt.Orientation.Horizontal)
         food_slider.setObjectName("food_slider")
         food_slider.setSteps(FOOD_PER_TURN_STEPS)
         food_slider.setValue(DEFAULT_FOOD_PER_TURN)
@@ -103,14 +104,16 @@ class ToolbarUI(QWidget):
             food_slider, QIcon("assets/apple.svg"), "Food",
             lambda value: f"{str(round(value, 2))} per turn", food_slider.on_value_changed)
 
-        settings_button = QPushButton(icon=QIcon("assets/cog.svg"))
-        settings_button.setIconSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
-        settings_button.clicked.connect(self.settings_button_clicked)
-        settings_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.settings_button = settings_button
-        settings_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
+        self.settings_button: QPushButton = QPushButton()
+        self.settings_button.setIcon(QIcon("assets/cog.svg"))
+        self.settings_button.setIconSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
+        self.settings_button.clicked.connect(self.settings_button_clicked)
+        self.settings_button.setCursor(
+            QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
 
-        self.graph_button = QPushButton(icon=QIcon("assets/graph.svg"))
+        self.graph_button: QPushButton = QPushButton()
+        self.graph_button.setIcon(QIcon("assets/graph.svg"))
         self.graph_button.setIconSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
         self.graph_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
 
@@ -120,23 +123,25 @@ class ToolbarUI(QWidget):
         layout.addWidget(speed_slider_container)
         layout.addWidget(mutation_slider_container)
         layout.addWidget(food_slider_container)
-        spacer = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        spacer = QSpacerItem(
+            0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         layout.addItem(spacer)
         layout.addWidget(self.graph_button)
-        layout.addWidget(settings_button, alignment=Qt.AlignRight)
+        layout.addWidget(
+            self.settings_button, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
         apply_style_sheet_file(self, CSS_FILES)
 
-    def __change_mutation_rate(self, value: int):
+    def __change_mutation_rate(self, value: int) -> None:
         self.settings.mutation_rate = value/10
         self.game.change_settings(self.settings)
 
-    def __change_food_rate(self, value: int):
+    def __change_food_rate(self, value: float) -> None:
         self.settings.food_per_turn = value
         self.game.change_settings(self.settings)
 
-    def __on_play_pause_changed(self, is_playing: bool):
+    def __on_play_pause_changed(self, is_playing: bool) -> None:
         self.play_pause_button.setChecked(is_playing)
 
         if is_playing:

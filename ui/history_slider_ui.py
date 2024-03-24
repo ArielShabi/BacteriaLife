@@ -1,7 +1,6 @@
 from typing import Callable
 from PyQt5.QtWidgets import QWidget, QSlider, QHBoxLayout, QLabel
 from PyQt5.QtCore import Qt
-
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_saver import HistorySaver
 from models.board_data import BoardData
@@ -27,9 +26,9 @@ class HistorySliderUI(QWidget):
 
         self.game.add_listener(ON_TURN_FINISHED, self.__on_turn_finished)
 
-    def initUI(self):
+    def initUI(self) -> None:
         layout = QHBoxLayout(self)
-        self.slider = QSlider(Qt.Horizontal)
+        self.slider = QSlider(Qt.Orientation.Horizontal)
 
         self.slider.setRange(0, 0)
         self.slider.setValue(0)
@@ -40,7 +39,7 @@ class HistorySliderUI(QWidget):
 
         self.slider_label = QLabel("0/0")
         self.slider_label.setFixedWidth(LABEL_WIDTH)
-        self.slider_label.setAlignment(Qt.AlignCenter)
+        self.slider_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.goto_button = JumpToTurnButton(
             self.slider.maximum, self.game, self.history_saver)
@@ -49,12 +48,12 @@ class HistorySliderUI(QWidget):
         layout.addWidget(self.slider_label)
         layout.addWidget(self.goto_button)
 
-        self.slider.enterEvent = lambda _: self.slider.setStyleSheet(
+        self.slider.enterEvent = lambda _: self.slider.setStyleSheet(  # type: ignore
             self.slider.styleSheet() +
             "QSlider::handle:horizontal {background-color: #0078D7;border-color: #0078D7;}"
         )
 
-        self.slider.leaveEvent = lambda _: self.slider.setStyleSheet(
+        self.slider.leaveEvent = lambda _: self.slider.setStyleSheet(  # type: ignore
             self.slider.styleSheet().replace(
                 "QSlider::handle:horizontal {background-color: #0078D7;border-color: #0078D7;}", "")
         )
@@ -62,23 +61,29 @@ class HistorySliderUI(QWidget):
         self.setLayout(layout)
         apply_style_sheet_file(self, CSS_FILES)
 
-    def __on_turn_finished(self, _):
+    def __on_turn_finished(self, _: BoardData) -> None:
         total_turns = self.game.live_turn_number
         current_turn = self.game.history_runner.turn if self.game.running_from_history else total_turns
         self.slider_label.setText(f"{current_turn}/{total_turns}")
         self.slider.setRange(0, total_turns)
         self.slider.setValue(current_turn)
 
-    def __on_slider_pressed(self):
+    def __on_slider_pressed(self) -> None:
         self.__pause_value_before_slider_pressed = self.game.is_running
         self.game.toggle_play_pause(False)
 
-    def __on_slider_change(self, value: int):
+    def __on_slider_change(self, value: int) -> None:
         # Add debounce
         self.slider_label.setText(f"{value}/{self.slider.maximum()}")
         board = self.history_saver.get_turn(self.slider.value())
         self.update_board(board)
 
-    def __on_slider_released(self):
+    def __on_slider_released(self) -> None:
         self.game.start_run_from_history(self.slider.value())
         self.game.toggle_play_pause(self.__pause_value_before_slider_pressed)
+
+    def __enter_event(self) -> None:
+        self.slider.setStyleSheet(
+            self.slider.styleSheet() +
+            "QSlider::handle:horizontal {background-color: #0078D7;border-color: #0078D7;}"
+        )

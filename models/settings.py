@@ -9,7 +9,7 @@ class Settings:
     def __init__(self,
                  board_size: tuple[int, int] = (
                      START_BOARD_WIDTH, START_BOARD_HEIGHT),
-                 food_per_turn: int = DEFAULT_FOOD_PER_TURN,
+                 food_per_turn: float = DEFAULT_FOOD_PER_TURN,
                  mutation_rate: float = DEFAULT_MUTATION_RATE,
                  magic_door: Optional[tuple[Location, Location]] = None
                  ):

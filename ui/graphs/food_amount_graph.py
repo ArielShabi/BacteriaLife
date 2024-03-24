@@ -15,7 +15,7 @@ class FoodAmountGraph(AbstractGraph):
         self.plot.setPen(GRAPH_COLOR)
         return self.food_amount_graph
 
-    def update_data(self):
+    def update_data(self) -> None:
         turns = self.history.turns
 
         if len(turns) == 0:

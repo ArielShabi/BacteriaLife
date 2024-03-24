@@ -26,7 +26,7 @@ class AverageStatsGraph(AbstractGraph):
 
         return self.average_stats_graph
 
-    def update_data(self):
+    def update_data(self) -> None:
         turns = self.history.turns
 
         if len(turns) == 0:

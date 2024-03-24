@@ -1,9 +1,8 @@
 from datetime import datetime
-from typing import Callable
+from typing import Callable, List
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
-
 from const import BUTTON_SIZE
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_saver import HistorySaver
@@ -17,13 +16,13 @@ DARK_GRAPH_BACKGROUND = "#444444"
 
 
 class GraphPage(QWidget):
-    def __init__(self, change_page: Callable, history_saver: HistorySaver, game: GameRunner):
+    def __init__(self, change_page: Callable[[], None], history_saver: HistorySaver, game: GameRunner) -> None:
         super().__init__()
 
         self.change_page = change_page
 
         self.history = history_saver
-        self.graphs: list[AbstractGraph] = [
+        self.graphs: List[AbstractGraph] = [
             PopulationSizeGraph(history_saver),
             AverageStatsGraph(history_saver),
             FoodAmountGraph(history_saver),
@@ -34,12 +33,14 @@ class GraphPage(QWidget):
 
         self.initUI()
 
-    def initUI(self):
-        self.go_back_button = QPushButton(icon=QIcon("assets/back.svg"))
+    def initUI(self) -> None:
+        self.go_back_button = QPushButton()
+        self.go_back_button.setIcon(QIcon("assets/back.svg"))
         self.go_back_button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
         self.go_back_button.clicked.connect(self.change_page)
 
-        self.download_button = QPushButton(icon=QIcon("assets/download.svg"))
+        self.download_button = QPushButton()
+        self.download_button.setIcon(QIcon("assets/download.svg"))
         self.download_button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
         self.download_button.clicked.connect(self.__save_graphs_to_file)
 
@@ -49,7 +50,7 @@ class GraphPage(QWidget):
 
         self.page_grid.addWidget(self.go_back_button, 0, 0)
         self.page_grid.addWidget(self.download_button,
-                                 0, 1, alignment=Qt.AlignRight)
+                                 0, 1, alignment=Qt.AlignmentFlag.AlignRight)
 
         graph_grid = QGridLayout()
 
@@ -66,14 +67,14 @@ class GraphPage(QWidget):
 
         self.setLayout(self.page_grid)
 
-    def on_page_set(self):
+    def on_page_set(self) -> None:
         self.__update_graphs()
 
-    def __update_graphs(self):
+    def __update_graphs(self) -> None:
         for graph in self.graphs:
             graph.update_data()
 
-    def __save_graphs_to_file(self):
+    def __save_graphs_to_file(self) -> None:
         geometry = self.graphs_container.geometry()
 
         pixmap = QPixmap(geometry.size())

@@ -8,7 +8,7 @@ from logic.history_runner import HistoryRunner
 from logic.history_saver import HistorySaver
 from ui.pages.graph_page import GraphPage
 from ui.pages.simulation_page import SimulationPage
-from ui.ui_utils import createColoredIcon
+from ui.ui_utils import create_colored_icon
 
 CSS_FILE = "main_window.css"
 
@@ -16,7 +16,7 @@ DARK_BACKGROUND = "#333333"
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.initUI()
         history_saver = HistorySaver()
@@ -30,19 +30,19 @@ class MainWindow(QMainWindow):
         self.stackedWidget.addWidget(self.simulation_page)
         self.stackedWidget.addWidget(self.graph_page)
 
-    def go_to_simulation_page(self):
+    def go_to_simulation_page(self) -> None:
         self.stackedWidget.setCurrentIndex(0)
 
-    def go_to_graph_page(self):
+    def go_to_graph_page(self) -> None:
         self.stackedWidget.setCurrentIndex(1)
         self.graph_page.on_page_set()
 
-    def initUI(self):
+    def initUI(self) -> None:
         super().__init__()
         self.setWindowTitle("Bacteria Game")
         self.__set_icon()
 
-    def __set_icon(self):
+    def __set_icon(self) -> None:
         random_bacteria = get_random_bacteria()
         color = get_bacteria_color(random_bacteria.properties)
-        self.setWindowIcon(createColoredIcon("assets/bacteria.svg", color))
+        self.setWindowIcon(create_colored_icon("assets/bacteria.svg", color))

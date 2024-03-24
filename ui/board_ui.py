@@ -1,7 +1,8 @@
+from typing import Optional
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QSizePolicy
 from PyQt5.QtCore import Qt
 from PyQt5.QtSvg import QGraphicsSvgItem
-
+from PyQt5.QtGui import QResizeEvent
 
 from helpers.color import get_bacteria_color, get_food_color, get_portal_color
 from models.board import Board
@@ -34,10 +35,15 @@ class BoardUi(QGraphicsView):
         self.fitInView(self.board_scene.sceneRect(),
                        Qt.AspectRatioMode.KeepAspectRatio)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event:Optional[QResizeEvent]) -> None:
         super().resizeEvent(event)
-        self.board_scene.setSceneRect(0, 0, self.viewport(
-        ).size().width(), self.viewport().size().height())
+        view_port = self.viewport()
+
+        if view_port is None:
+            return
+
+        self.board_scene.setSceneRect(
+            0, 0, view_port.size().width(), view_port.size().height())
         self.update_board(self.board)
 
     def update_board(self, board: BoardData) -> None:
@@ -65,7 +71,9 @@ class BoardUi(QGraphicsView):
             self.__add_item(width_offset, height_offset,
                             self.board.magic_door[0], food_ui)
 
-    def __add_item(self, width_offset: float, height_offset: float, location: Location, svg: QGraphicsSvgItem):
+    def __add_item(self, width_offset: float, height_offset: float,
+                   location: Location, svg: QGraphicsSvgItem
+                   ) -> None:
         max_x = self.rect().width()-svg.scale() * \
             svg.boundingRect().width()
         max_y = self.rect().height()-svg.scale() * \

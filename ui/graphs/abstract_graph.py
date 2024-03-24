@@ -14,5 +14,5 @@ class AbstractGraph(ABC):
         pass
 
     @abstractmethod
-    def update_data(self):
+    def update_data(self) -> None:
         pass

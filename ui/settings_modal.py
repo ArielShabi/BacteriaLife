@@ -1,8 +1,8 @@
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QGridLayout, QSpinBox, QCheckBox, QWidget, QApplication
+from typing import Optional
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QGridLayout, QSpinBox, QCheckBox, QWidget
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QShowEvent
 
-from helpers.random_generator import generate_random_location
 from models.settings import Settings
 
 MAX_SLIDER_VALUE = 10
@@ -10,20 +10,20 @@ SLIDER_SIZE = 150
 
 
 class SettingsModal(QDialog):
-    def __init__(self, settings: Settings, parent=None):
-        super().__init__(parent)
+    def __init__(self, settings: Settings) -> None:
+        super().__init__()
         self.settings = settings
         self.setWindowTitle("Settings")
         self.setMinimumWidth(300)
         self.setWindowIcon(QIcon("assets/cog.svg"))
         self.initUI()
 
-    def initUI(self):
+    def initUI(self) -> None:
         layout = QVBoxLayout()
         grid_layout = QGridLayout()
 
         header_label = QLabel("Choose your settings:")
-        layout.addWidget(header_label, alignment=Qt.AlignCenter)
+        layout.addWidget(header_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.board_width = QSpinBox()
         self.board_width.setMinimum(0)
@@ -53,7 +53,7 @@ class SettingsModal(QDialog):
 
         self.setLayout(layout)
 
-    def accept(self):
+    def accept(self) -> None:
         self.settings.board_size = (
             self.board_width.value(), self.board_height.value())
         if (not self.__is_magic_door_valid()):
@@ -66,7 +66,7 @@ class SettingsModal(QDialog):
 
         super().accept()
 
-    def showEvent(self, event):
+    def showEvent(self, event: Optional[QShowEvent]) -> None:
         super().showEvent(event)
         self.board_width.setValue(self.settings.board_size[0])
         self.board_height.setValue(self.settings.board_size[1])
@@ -80,7 +80,7 @@ class SettingsModal(QDialog):
         else:
             self.magic_door_check_box.setChecked(False)
 
-    def __init_portal(self):
+    def __init_portal(self) -> None:
         self.magic_door_check_box = QCheckBox()
         self.magic_door_check_box.stateChanged.connect(
             self.__on_portal_checkbox_change)
@@ -119,7 +119,7 @@ class SettingsModal(QDialog):
 
         self.grid_layout.addWidget(self.portal_inputs_container, 2, 0, 1, 4)
 
-    def __on_portal_checkbox_change(self):
+    def __on_portal_checkbox_change(self) -> None:
         if self.magic_door_check_box.isChecked():
             self.portal_inputs_container.setVisible(True)
         else:
@@ -128,15 +128,15 @@ class SettingsModal(QDialog):
             self.adjustSize()
             self.adjustSize()
 
-    def __is_magic_door_valid(self):
+    def __is_magic_door_valid(self) -> bool:
         if (self.magic_door_check_box.isChecked()):
             return (self.portal_from_x.value() != self.portal_to_x.value() or self.portal_from_y.value() != self.portal_to_y.value())
         return False
-    
-    def __on_board_width_change(self):
+
+    def __on_board_width_change(self) -> None:
         self.portal_from_x.setMaximum(self.board_width.value())
         self.portal_to_x.setMaximum(self.board_width.value())
-        
-    def __on_board_height_change(self):
+
+    def __on_board_height_change(self) -> None:
         self.portal_from_y.setMaximum(self.board_height.value())
         self.portal_to_y.setMaximum(self.board_height.value())

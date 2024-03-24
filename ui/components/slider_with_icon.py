@@ -9,9 +9,9 @@ class SliderWithButton(QWidget):
                  slider: QSlider,
                  icon: QIcon,
                  label: str,
-                 tooltip_function: Optional[Callable[[int], str]] = None,
+                 tooltip_function: Optional[Callable[[float], str]] = None,
                  on_value_changed: Optional[Callable[[
-                     Callable[[int], None]], None]] = None
+                     Callable[[float], None]], None]] = None
                  ):
         super().__init__()
         self.initUI(icon, slider, label)
@@ -22,7 +22,7 @@ class SliderWithButton(QWidget):
         else:
             slider.valueChanged.connect(self.show_slider_value)
 
-    def initUI(self, icon: QIcon, slider: QSlider, label: str):
+    def initUI(self, icon: QIcon, slider: QSlider, label: str)-> None:
         layout = QHBoxLayout()
 
         slider_icon = QLabel()
@@ -36,7 +36,7 @@ class SliderWithButton(QWidget):
         self.setLayout(layout)
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-    def show_slider_value(self, value: int) -> None:
+    def show_slider_value(self, value: float) -> None:
         text = self.tooltip_function(
             value) if self.tooltip_function else f"{value}"
         QToolTip.showText(QCursor.pos(), text)

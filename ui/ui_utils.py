@@ -8,7 +8,7 @@ from PyQt5.QtSvg import QSvgRenderer
 STYLE_SHEETS_ROOT_FOLDER = "ui/stylesheets/"
 
 
-def apply_style_sheet_file(widget: QWidget, filename: Union[str, list[str]]):
+def apply_style_sheet_file(widget: QWidget, filename: Union[str, list[str]]) -> None:
     if isinstance(filename, str):
         filenames = [filename]
     elif isinstance(filename, list):
@@ -22,10 +22,10 @@ def apply_style_sheet_file(widget: QWidget, filename: Union[str, list[str]]):
     widget.setStyleSheet(style_sheet)
 
 
-def createColoredIcon(svg_path, color):
+def create_colored_icon(svg_path: str, color: QColor) -> QIcon:
     renderer = QSvgRenderer(svg_path)
     pixmap = QPixmap(renderer.defaultSize())
-    pixmap.fill(Qt.transparent)
+    pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
     renderer.render(painter)
     painter.setCompositionMode(QPainter.CompositionMode_SourceIn)

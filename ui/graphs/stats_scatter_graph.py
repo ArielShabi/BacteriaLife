@@ -27,7 +27,7 @@ class StatsScatterGraph(AbstractGraph):
 
         return self.stats_graph
 
-    def update_data(self):
+    def update_data(self) -> None:
         if len(self.history.turns) == 0:
             return
 
@@ -36,12 +36,15 @@ class StatsScatterGraph(AbstractGraph):
 
         spots = []
 
-        def reduce_stats(stats_bacterias_dict: dict[tuple[int, int], int], bacteria: Bacteria) -> dict:
+        def reduce_stats(
+            stats_bacterias_dict: dict[tuple[int, int], int],
+            bacteria: Bacteria
+        ) -> dict[tuple[int, int], int]:
             stats_bacterias_dict[(bacteria.properties.sense,
                                   bacteria.properties.speed)] += 1
             return stats_bacterias_dict
 
-        stats_bacterias = functools.reduce(
+        stats_bacterias: dict[tuple[int, int], int] = functools.reduce(
             reduce_stats, bacterias, defaultdict(int))
 
         for stats, amount in stats_bacterias.items():
@@ -49,10 +52,10 @@ class StatsScatterGraph(AbstractGraph):
                         'brush': get_bacteria_color(stats[1], stats[0])}
             spots.append(spot_dic)
 
-        def tooltip(x, y, data):
+        def tooltip(x: int, y: int, data: dict[tuple[int, int], int]) -> str:
             return f"""Sense: {int(x)}, Speed: {int(y)} amount: {data[(x, y)]}"""
 
-        self.scatter_plot.setData(spots,
+        self.scatter_plot.setData(spots=spots,
                                   data=stats_bacterias,
                                   hoverable=True,
                                   hoverPen='r',
