@@ -8,7 +8,7 @@ class HistoryRunner():
         self.history = history
         self.turn = 1
 
-    def get_turn(self, board: Board, increment_turn_counter=True) -> Union[Board, None]:
+    def get_turn(self, board: Board, increment_turn_counter: bool = True) -> Union[Board, None]:
         if increment_turn_counter:
             self.turn += 1
 

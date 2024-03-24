@@ -26,7 +26,7 @@ class GameRunner(EventEmitter):
         self.running_from_history = False
         self.timer.timeout.connect(self.run_turn)
 
-    def create_board(self):
+    def create_board(self) -> None:
         self.board = Board(*self.settings.board_size)
         bacterias = get_random_bacterias(*self.settings.board_size, 30)
 
@@ -35,7 +35,7 @@ class GameRunner(EventEmitter):
                 bacteria,
                 location)
 
-    def toggle_play_pause(self, to_start: bool = True):
+    def toggle_play_pause(self, to_start: bool = True) -> None:
         if to_start:
             self.__start()
         else:
@@ -45,7 +45,7 @@ class GameRunner(EventEmitter):
             self.fire_event(ON_PAUSE_PLAY_TOGGLE, to_start)
             self.is_running = to_start
 
-    def change_speed(self, speed: int):
+    def change_speed(self, speed: int) -> None:
         self.time_per_turn = round(START_TIME_PER_TURN / speed)
         self.timer.interval = round(START_TIME_PER_TURN / speed)
 
@@ -53,11 +53,11 @@ class GameRunner(EventEmitter):
             self.timer.stop()
             self.timer.start()
 
-    def update_board(self, board: Board):
+    def update_board(self, board: Board) -> None:
         self.board = board
         self.fire_event(ON_TURN_FINISHED, board)
 
-    def run_turn(self):
+    def run_turn(self) -> None:
         updated_board = None
 
         if self.running_from_history:
@@ -80,13 +80,13 @@ class GameRunner(EventEmitter):
             self.toggle_play_pause(False)
             self.fire_event(ON_GAME_OVER, updated_board)
 
-    def change_settings(self, settings: Settings):
+    def change_settings(self, settings: Settings) -> None:
         self.settings = settings
         self.turn_runner.settings = settings
         self.board.resize(*settings.board_size)
         self.board.magic_door = settings.magic_door
 
-    def start_run_from_history(self, from_turn: int):
+    def start_run_from_history(self, from_turn: int) -> None:
         self.running_from_history = True
         self.history_runner.turn = from_turn
         possible_board = self.history_runner.get_turn(self.board, False)
@@ -94,11 +94,11 @@ class GameRunner(EventEmitter):
         if possible_board is not None:
             self.board = possible_board
 
-    def __start(self):
+    def __start(self) -> None:
         if not (self.is_running):
             self.fire_event(ON_TURN_FINISHED, self.board)
             self.timer.start()
 
-    def __pause(self):
+    def __pause(self) -> None:
         if (self.is_running):
             self.timer.stop()

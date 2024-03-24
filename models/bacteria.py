@@ -1,6 +1,6 @@
 from .bacteria_properties import BacteriaProperties
-from .models_types import BoardObject
-from project_types import BacteriaStrategy, Vector
+from .models_types import BacteriaStrategy, BoardObject
+from project_types import Vector
 
 
 class Bacteria:

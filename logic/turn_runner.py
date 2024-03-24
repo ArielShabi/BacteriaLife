@@ -25,7 +25,7 @@ class TurnRunner:
 
         return board
 
-    def __play_bacterias(self, board: Board):
+    def __play_bacterias(self, board: Board) -> None:
         sorted_by_speed = sorted(
             board.bacterias, key=lambda bacteria_and_location: bacteria_and_location[0].properties.speed, reverse=True)
 
@@ -52,7 +52,7 @@ class TurnRunner:
             if not isinstance(new_location_content, BacteriaProperties):
                 board.update_bacteria(bacteria.id, bacteria, new_location)
 
-    def __generate_food(self, board: Board, turn_number: int):
+    def __generate_food(self, board: Board, turn_number: int) -> None:
         # if food_per_turn is a fraction, we will generate food every 1/food_per_turn turns
         food_per_turn = self.settings.food_per_turn
 
@@ -74,7 +74,7 @@ class TurnRunner:
                 board.add_food(Food(ENERGY_FOR_FOOD), location)
                 food_placed -= 1
 
-    def __duplicate_bacterias(self,  board: Board):
+    def __duplicate_bacterias(self,  board: Board) -> None:
         for bacteria, _ in board.bacterias:
             if bacteria.energy < START_ENERGY * 2:
                 continue
@@ -116,7 +116,7 @@ class TurnRunner:
 
         return area_of_sense
 
-    def __mutate_bacteria(self, bacteria: Bacteria):
+    def __mutate_bacteria(self, bacteria: Bacteria) -> None:
         mutation_rate = self.settings.mutation_rate
 
         if random_event_occurred(mutation_rate):
@@ -125,7 +125,7 @@ class TurnRunner:
             bacteria.properties.sense = alter_value(
                 bacteria.properties.sense, MUTATION_CHANGE, 1, MAX_BACTERIA_SENSE)
 
-    def __natural_selection(self, board: Board):
+    def __natural_selection(self, board: Board) -> None:
         for bacteria, _ in board.bacterias:
             if bacteria.energy <= 0:
                 board.remove_bacteria(bacteria.id)

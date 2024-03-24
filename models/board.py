@@ -32,7 +32,7 @@ class Board(BoardData):
         self.cells[start_location[1]][start_location[0]] = bacteria.properties
         return True
 
-    def remove_bacteria(self, bacteria_id) -> bool:
+    def remove_bacteria(self, bacteria_id: str) -> bool:
         found_index, location = next(((index, loc) for index, (bacteria, loc) in enumerate(
             self.bacterias) if bacteria.id == bacteria_id), (None, None))
 

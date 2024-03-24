@@ -8,7 +8,7 @@ class HistorySaver():
         super().__init__()
         self.turns: list[BoardData] = []
 
-    def save_turn(self, board: BoardData):
+    def save_turn(self, board: BoardData) -> None:
         self.turns.append(self.__get_board_data(board))
 
     def get_turn(self, turn: int) -> BoardData:

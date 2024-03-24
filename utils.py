@@ -14,9 +14,12 @@ def get_direction_vector(start: Location, end: Location) -> Location:
 
 
 def get_distance(start: Location, end: Location) -> int:
-    return ((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2) ** 0.5
+    return int(round(
+        ((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2) ** 0.5)
+    )
 
-def is_point_on_line(start:Location, end:Location, point:Location, tolerance=1e-9):    
+
+def is_point_on_line(start: Location, end: Location, point: Location, tolerance: float = 1e-9) -> bool:
     x1, y1 = start
     x2, y2 = end
     x, y = point
@@ -30,6 +33,7 @@ def is_point_on_line(start:Location, end:Location, point:Location, tolerance=1e-
             return True
 
     return False
+
 
 def clamp_location(location: Location, min_location: Location, max_location: Location) -> Location:
     return (

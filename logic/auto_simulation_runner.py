@@ -16,7 +16,7 @@ class AutoSimulationRunner(QThread):
 
     finished = pyqtSignal(Board)
 
-    def run(self):
+    def run(self) -> None:
         start = datetime.now()
         board = self.game.board
         for turn_number in range(self.start_amount, self.until_turn+1):
@@ -30,7 +30,7 @@ class AutoSimulationRunner(QThread):
 
         self.game.live_turn_number = turn_number
         self.game.running_from_history = False
-        
-        print(f"Simulation finished in {datetime.now() - start}")   
+
+        print(f"Simulation finished in {datetime.now() - start}")
 
         self.finished.emit(board)

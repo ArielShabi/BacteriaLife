@@ -11,9 +11,10 @@ from models.food import Food
 def get_bacteria_color(bacteria: BacteriaProperties) -> QColor:
     return get_bacteria_color_from_properties(bacteria.speed, bacteria.sense)
 
-@dispatch(int, int) # type: ignore
+
+@dispatch(int, int)  # type: ignore
 def get_bacteria_color(speed: int, sense: int) -> QColor:
-    speed_color = int((speed / MAX_BACTERIA_SPEED) * 255)# type: ignore
+    speed_color = int((speed / MAX_BACTERIA_SPEED) * 255)
     sense_color = int((sense / MAX_BACTERIA_SENSE) * 255)
     return neon_color(QColor(speed_color, 0, sense_color))
 
@@ -26,7 +27,7 @@ def get_bacteria_color_from_properties(speed: int, sense: int) -> QColor:
 
 def neon_color(color: QColor) -> QColor:
     r, g, b, _ = color.getRgb()
-    
+
     if r is None or g is None or b is None:
         return color
 
