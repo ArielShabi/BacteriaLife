@@ -13,10 +13,8 @@ def get_direction_vector(start: Location, end: Location) -> Location:
     return (end[0] - start[0], end[1] - start[1])
 
 
-def get_distance(start: Location, end: Location) -> int:
-    return int(round(
-        ((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2) ** 0.5)
-    )
+def get_distance(start: Location, end: Location) -> float:
+    return float(((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2) ** 0.5)
 
 
 def is_point_on_line(start: Location, end: Location, point: Location, tolerance: float = 1e-9) -> bool:
@@ -46,7 +44,7 @@ def round_vector(vector: Location) -> Location:
     return (round(vector[0]), round(vector[1]))
 
 
-def set_vector_length(vector: Vector, length: int) -> Vector:
+def set_vector_length(vector: Vector, length: float) -> Vector:
     magnitude = (vector[0] ** 2 + vector[1] ** 2) ** 0.5
     if magnitude == 0:
         return vector

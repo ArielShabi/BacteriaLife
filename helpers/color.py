@@ -1,4 +1,3 @@
-from typing import overload
 from PyQt5.QtGui import QColor
 from multipledispatch import dispatch
 
@@ -26,10 +25,9 @@ def get_bacteria_color_from_properties(speed: int, sense: int) -> QColor:
 
 
 def neon_color(color: QColor) -> QColor:
-    r, g, b, _ = color.getRgb()
-
-    if r is None or g is None or b is None:
-        return color
+    r = color.red()
+    g = color.green()
+    b = color.blue()
 
     neon_r = min(255, r + 100)
     neon_g = max(0, g - 50)
