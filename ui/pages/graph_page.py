@@ -3,6 +3,8 @@ from typing import Callable, List
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
+from pyqttoast import Toast, ToastPreset
+
 from const import BUTTON_SIZE
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
 from logic.history_saver import HistorySaver
@@ -81,5 +83,16 @@ class GraphPage(QWidget):
 
         self.graphs_container.render(pixmap)
 
-        pixmap.save(f'graphs_{datetime.now().strftime(
-            "%Y-%m-%d %H_%M_%S %f")}.png', 'PNG')
+        file_name = f'graphs_{datetime.now().strftime(
+            "%Y-%m-%d %H_%M_%S %f")}.png'
+
+        if (pixmap.save(file_name, 'PNG')):
+            self._show_toast(file_name)
+
+    def _show_toast(self, file_name: str) -> None:
+        toast = Toast(self)
+        toast.setDuration(5000)
+        toast.setTitle('Graphs saved to file')
+        toast.setText('Saved to ' + file_name)
+        toast.applyPreset(ToastPreset.SUCCESS)
+        toast.show()

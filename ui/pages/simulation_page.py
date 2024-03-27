@@ -18,8 +18,7 @@ class SimulationPage(QWidget):
     def __init__(self, change_page: Callable[[], None], history_saver: HistorySaver, game: GameRunner) -> None:
         super().__init__()
         self.history_saver = history_saver
-        self.game = game
-        self.game.initialize_run()
+        self.game = game        
         self.board_ui = BoardUi(self.game.board)
         self.toolbar = ToolbarUI(self.game, self.board_ui.update_board, self.history_saver)
         self.history_slider = HistorySliderUI(
@@ -31,7 +30,7 @@ class SimulationPage(QWidget):
 
         self.toolbar.graph_button.clicked.connect(change_page)
 
-        self.board_ui.update_board(self.game.board)
+        self.game.initialize_run()
 
     def initUI(self) -> None:
         self.setWindowTitle("Bacteria Game")
