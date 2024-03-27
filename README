@@ -1,0 +1,18 @@
+Hello and welcome to BacteriaSim.
+This a simulation of bacteria natural selection (and a variation of random walk).
+
+Notable extensions:
+
+GUI: gui written in PYQT5, looking fresh and easy to use.
+
+Timeline: A slider that allows the user to go back and forth in the simulation.
+
+Jump to generation: A helpful feature that allows the user to jump to a specific generation
+    in the future.
+
+Simulation settings: the ability to change the settings, from speed of the simulation, mutation 
+    rate, food spawn rate, board size, and more.
+
+Live statistics: graph page that updates in real time.
+
+And more!
