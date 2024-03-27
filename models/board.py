@@ -110,6 +110,11 @@ class Board(BoardData):
     def is_occupied(self, location: Location) -> bool:
         return self.__is_out_of_bounds(location) or self.get_cell_content(location) is not None
 
+    def clear_board(self) -> None:
+        self.bacterias = []
+        self.foods = []
+        self.__init_cells()
+
     def __is_out_of_bounds(self, location: Location) -> bool:
         return location[0] < 0 or location[0] >= self.width or location[1] < 0 or location[1] >= self.height
 

@@ -5,6 +5,7 @@ from PyQt5.QtCore import QSize, Qt
 
 from const import BUTTON_SIZE, DEFAULT_FOOD_PER_TURN, DEFAULT_MUTATION_RATE
 from logic.game_runner import ON_PAUSE_PLAY_TOGGLE, GameRunner
+from logic.history_saver import HistorySaver
 from models.board_data import BoardData
 from ui.components.slider_with_icon import SliderWithButton
 from ui.components.uneven_step_slider import UnevenStepSlider
@@ -18,18 +19,20 @@ CSS_FILES = [
 
 SLIDER_SIZE = 200
 MAX_SPEED_SLIDER_VALUE = 30
+RESTART_BUTTON_SIZE = BUTTON_SIZE - 8
 
 FOOD_PER_TURN_STEPS = [1/3, 1/2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 
 class ToolbarUI(QWidget):
-    def __init__(self, game: GameRunner, update_board: Callable[[BoardData], None]) -> None:
+    def __init__(self, game: GameRunner, update_board: Callable[[BoardData], None], history_saver: HistorySaver) -> None:
         super().__init__()
         self.play_icon = QIcon("assets/play.svg")
         self.pause_icon = QIcon("assets/pause.svg")
         self.settings = game.settings
         self.game = game
         self.update_board = update_board
+        self.history_saver = history_saver
 
         self.initUI()
 
@@ -66,8 +69,18 @@ class ToolbarUI(QWidget):
 
         play_pause_button.clicked.connect(self.toggle_play_pause)
         play_pause_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.play_pause_button = play_pause_button
         play_pause_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
+        self.play_pause_button = play_pause_button
+
+        restart_button = QPushButton()
+        restart_button.setIcon(QIcon("assets/restart.svg"))
+        restart_button.setIconSize(
+            QSize(RESTART_BUTTON_SIZE, RESTART_BUTTON_SIZE))
+        restart_button.setFixedSize(QSize(BUTTON_SIZE, BUTTON_SIZE))
+        restart_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        restart_button.clicked.connect(self.__restart_button_clicked)
+        self.restart_button = restart_button
 
         speed_slider = QSlider(Qt.Orientation.Horizontal)
         speed_slider.setObjectName("speed_slider")
@@ -120,6 +133,7 @@ class ToolbarUI(QWidget):
         layout.setSpacing(20)
 
         layout.addWidget(play_pause_button)
+        layout.addWidget(restart_button)
         layout.addWidget(speed_slider_container)
         layout.addWidget(mutation_slider_container)
         layout.addWidget(food_slider_container)
@@ -148,3 +162,7 @@ class ToolbarUI(QWidget):
             self.play_pause_button.setIcon(self.pause_icon)
         else:
             self.play_pause_button.setIcon(self.play_icon)
+
+    def __restart_button_clicked(self) -> None:
+        self.history_saver.clear_history()
+        self.game.initialize_run()

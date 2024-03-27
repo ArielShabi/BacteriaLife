@@ -1,4 +1,4 @@
-from const import START_TIME_PER_TURN
+from const import START_TIME_PER_TURN, NUMBER_OF_BACTERIAS_TO_START
 from helpers.timer import Timer
 from logic.bacteria_creator import get_random_bacterias
 from logic.event_emitter import EventEmitter
@@ -20,21 +20,28 @@ class GameRunner(EventEmitter):
         self.turn_runner = TurnRunner(self.settings)
         self.history_runner = history_runner
         self.time_per_turn = time_per_turn
-        self.board: Board = Board(0, 0)
+        self.board: Board = Board(*self.settings.board_size)
         self.timer: Timer = Timer(START_TIME_PER_TURN)
         self.is_running = False
         self.running_from_history = False
         self.timer.timeout.connect(self.run_turn)
 
-    def create_board(self) -> None:
-        self.board = Board(*self.settings.board_size)
-        bacterias = get_random_bacterias(*self.settings.board_size, 30)
+    def initialize_run(self) -> None:
+        self.toggle_play_pause(False)
+
+        self.board.clear_board()
+        self.live_turn_number = 0        
+
+        bacterias = get_random_bacterias(
+            *self.settings.board_size, NUMBER_OF_BACTERIAS_TO_START)
 
         for bacteria, location in bacterias:
             self.board.add_bacteria(
                 bacteria,
                 location)
-
+        
+        self.fire_event(ON_TURN_FINISHED, self.board)
+        
     def toggle_play_pause(self, to_start: bool = True) -> None:
         if to_start:
             self.__start()

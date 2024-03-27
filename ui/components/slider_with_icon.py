@@ -1,7 +1,9 @@
 from typing import Callable, Optional
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QSlider, QLabel, QSizePolicy, QToolTip
 from PyQt5.QtGui import QIcon, QCursor
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, Qt
+
+SPACING = 10
 
 
 class SliderWithButton(QWidget):
@@ -22,7 +24,7 @@ class SliderWithButton(QWidget):
         else:
             slider.valueChanged.connect(self.show_slider_value)
 
-    def initUI(self, icon: QIcon, slider: QSlider, label: str)-> None:
+    def initUI(self, icon: QIcon, slider: QSlider, label: str) -> None:
         layout = QHBoxLayout()
 
         slider_icon = QLabel()
@@ -31,7 +33,10 @@ class SliderWithButton(QWidget):
 
         layout.addWidget(slider_icon)
         layout.addWidget(slider)
-        layout.setSpacing(10)
+
+        layout.setSpacing(SPACING)
+
+        slider.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.setLayout(layout)
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)

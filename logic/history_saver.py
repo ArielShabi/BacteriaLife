@@ -13,6 +13,9 @@ class HistorySaver():
 
     def get_turn(self, turn: int) -> BoardData:
         return self.turns[turn]
+    
+    def clear_history(self) -> None:
+        self.turns = []
 
     def __get_board_data(self, board: BoardData) -> BoardData:
         return BoardData(
@@ -21,4 +24,4 @@ class HistorySaver():
             copy.deepcopy(board.bacterias),
             copy.deepcopy(board.foods),
             copy.deepcopy(board.magic_door)
-        )
+        )        
