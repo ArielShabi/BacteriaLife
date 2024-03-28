@@ -82,8 +82,8 @@ class TurnRunner:
             child_bacteria = copy.deepcopy(bacteria)
             child_bacteria.energy = START_ENERGY
             child_bacteria.id = str(uuid.uuid4())
-            child_bacteria.properties.name = f"{
-                bacteria.properties.name} c "
+            child_bacteria.properties.name = f"""{
+                bacteria.properties.name} c """
             bacteria.energy -= START_ENERGY
             while True:
                 location = generate_random_location(board.width, board.height)

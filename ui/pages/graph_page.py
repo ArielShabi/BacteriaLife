@@ -83,8 +83,8 @@ class GraphPage(QWidget):
 
         self.graphs_container.render(pixmap)
 
-        file_name = f'graphs_{datetime.now().strftime(
-            "%Y-%m-%d %H_%M_%S %f")}.png'
+        file_name = f'''graphs_{datetime.now().strftime(
+            "%Y-%m-%d %H_%M_%S %f")}.png'''
 
         if (pixmap.save(file_name, 'PNG')):
             self._show_toast(file_name)
