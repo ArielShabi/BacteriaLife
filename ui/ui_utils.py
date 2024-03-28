@@ -9,6 +9,16 @@ STYLE_SHEETS_ROOT_FOLDER = "ui/stylesheets/"
 
 
 def apply_style_sheet_file(widget: QWidget, filename: Union[str, list[str]]) -> None:
+    """
+    Apply a style sheet file to a QWidget.
+
+    Args:
+        widget (QWidget): The widget to apply the style sheet to.
+        filename (Union[str, list[str]]): The filename or list of filenames of the style sheet file(s).
+
+    Returns:
+        None
+    """
     if isinstance(filename, str):
         filenames = [filename]
     elif isinstance(filename, list):
@@ -23,6 +33,16 @@ def apply_style_sheet_file(widget: QWidget, filename: Union[str, list[str]]) -> 
 
 
 def create_colored_icon(svg_path: str, color: QColor) -> QIcon:
+    """
+    Create a colored QIcon from an SVG file.
+
+    Args:
+        svg_path (str): The path to the SVG file.
+        color (QColor): The color to apply to the SVG.
+
+    Returns:
+        QIcon: The colored QIcon.
+    """
     renderer = QSvgRenderer(svg_path)
     pixmap = QPixmap(renderer.defaultSize())
     pixmap.fill(Qt.GlobalColor.transparent)

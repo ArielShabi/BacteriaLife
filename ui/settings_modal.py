@@ -7,18 +7,51 @@ from models.settings import Settings
 
 MAX_SLIDER_VALUE = 10
 SLIDER_SIZE = 150
+SETTINGS_MODAL_MIN_WIDTH = 300
 
 
 class SettingsModal(QDialog):
+    """
+    A dialog window for configuring settings.
+
+    Args:
+        settings (Settings): The current settings object.
+
+    Attributes:
+        settings (Settings): The current settings object.
+        board_width (QSpinBox): The spin box for selecting the board width.
+        board_height (QSpinBox): The spin box for selecting the board height.
+        grid_layout (QGridLayout): The grid layout for organizing the widgets.
+        magic_door_check_box (QCheckBox): The check box for enabling/disabling the magic door.
+        portal_from_x (QSpinBox): The spin box for selecting the x-coordinate of the portal's starting point.
+        portal_from_y (QSpinBox): The spin box for selecting the y-coordinate of the portal's starting point.
+        portal_to_x (QSpinBox): The spin box for selecting the x-coordinate of the portal's destination.
+        portal_to_y (QSpinBox): The spin box for selecting the y-coordinate of the portal's destination.
+        portal_inputs_container (QWidget): The container widget for the portal input fields.
+
+    """
+
     def __init__(self, settings: Settings) -> None:
+        """
+        Initializes the SettingsModal.
+
+        Args:
+            settings (Settings): The current settings object.
+
+        """
         super().__init__()
         self.settings = settings
         self.setWindowTitle("Settings")
-        self.setMinimumWidth(300)
+        
+        self.setMinimumWidth(SETTINGS_MODAL_MIN_WIDTH)
         self.setWindowIcon(QIcon("assets/cog.svg"))
         self.initUI()
 
     def initUI(self) -> None:
+        """
+        Initializes the user interface of the SettingsModal.
+
+        """
         layout = QVBoxLayout()
         grid_layout = QGridLayout()
 
@@ -54,6 +87,10 @@ class SettingsModal(QDialog):
         self.setLayout(layout)
 
     def accept(self) -> None:
+        """
+        Accepts the settings and closes the dialog.
+
+        """
         self.settings.board_size = (
             self.board_width.value(), self.board_height.value())
         if (not self.__is_magic_door_valid()):
@@ -67,6 +104,13 @@ class SettingsModal(QDialog):
         super().accept()
 
     def showEvent(self, event: Optional[QShowEvent]) -> None:
+        """
+        Overrides the showEvent method to update the UI with the current settings.
+
+        Args:
+            event (QShowEvent): The show event.
+
+        """
         super().showEvent(event)
         self.board_width.setValue(self.settings.board_size[0])
         self.board_height.setValue(self.settings.board_size[1])
@@ -81,6 +125,10 @@ class SettingsModal(QDialog):
             self.magic_door_check_box.setChecked(False)
 
     def __init_portal(self) -> None:
+        """
+        Initializes the magic door input fields.
+
+        """
         self.magic_door_check_box = QCheckBox()
         self.magic_door_check_box.stateChanged.connect(
             self.__on_portal_checkbox_change)
@@ -120,6 +168,10 @@ class SettingsModal(QDialog):
         self.grid_layout.addWidget(self.portal_inputs_container, 2, 0, 1, 4)
 
     def __on_portal_checkbox_change(self) -> None:
+        """
+        Handles the change event of the magic door check box.
+
+        """
         if self.magic_door_check_box.isChecked():
             self.portal_inputs_container.setVisible(True)
         else:
@@ -129,14 +181,29 @@ class SettingsModal(QDialog):
             self.adjustSize()
 
     def __is_magic_door_valid(self) -> bool:
+        """
+        Checks if the magic door input values are valid.
+
+        Returns:
+            bool: True if the magic door is valid, False otherwise.
+
+        """
         if (self.magic_door_check_box.isChecked()):
             return (self.portal_from_x.value() != self.portal_to_x.value() or self.portal_from_y.value() != self.portal_to_y.value())
         return False
 
     def __on_board_width_change(self) -> None:
+        """
+        Updates the maximum values of the portal input fields based on the board width.
+
+        """
         self.portal_from_x.setMaximum(self.board_width.value())
         self.portal_to_x.setMaximum(self.board_width.value())
 
     def __on_board_height_change(self) -> None:
+        """
+        Updates the maximum values of the portal input fields based on the board height.
+
+        """
         self.portal_from_y.setMaximum(self.board_height.value())
         self.portal_to_y.setMaximum(self.board_height.value())

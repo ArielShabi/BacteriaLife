@@ -3,8 +3,33 @@ from .models_types import BacteriaStrategy, BoardObject
 from project_types import Vector
 
 
-class Bacteria:
+class Bacteria(BacteriaProperties):    
+    """
+    Represents a bacteria in the simulation.
+
+    Args:
+        id (str): The unique identifier of the bacteria.
+        energy (int): The initial energy level of the bacteria.
+        properties (BacteriaProperties): The properties of the bacteria.
+        strategy (BacteriaStrategy): The strategy used by the bacteria.
+
+    Attributes:
+        id (str): The unique identifier of the bacteria.
+        properties (BacteriaProperties): The properties of the bacteria.
+        energy (int): The current energy level of the bacteria.
+        strategy (BacteriaStrategy): The strategy used by the bacteria.
+    """
+
     def __init__(self, id: str, energy: int, properties: BacteriaProperties, strategy: BacteriaStrategy):
+        """
+        Initializes a new instance of the Bacteria class.
+
+        Args:
+            id (str): The unique identifier of the bacteria.
+            energy (int): The initial energy level of the bacteria.
+            properties (BacteriaProperties): The properties of the bacteria.
+            strategy (BacteriaStrategy): The strategy used by the bacteria.
+        """
         self.id = id
         self.properties = properties
         self.energy = energy

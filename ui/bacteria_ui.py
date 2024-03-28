@@ -5,7 +5,29 @@ from const import SVG_SIZE
 
 
 class BoardItemSvg(QGraphicsSvgItem):
+    """
+    This class represents a custom SVG item for the game board.
+
+    Args:
+        svg_path (str): The path to the SVG file.
+        color (QColor): The color to apply to the SVG item.
+        width_offset (float): The desired width offset for scaling the SVG item.
+        height_offset (float): The desired height offset for scaling the SVG item.
+    """
+
     def __init__(self, svg_path: str, color: QColor, width_offset: float, height_offset: float):
+        """
+        Initializes a new instance of the BoardItemSvg class.
+
+        Args:
+            svg_path (str): The path to the SVG file.
+            color (QColor): The color to apply to the SVG item.
+            width_offset (float): The desired width offset for scaling the SVG item.
+            height_offset (float): The desired height offset for scaling the SVG item.
+
+        Returns:
+            None
+        """
 
         super().__init__(svg_path)
 

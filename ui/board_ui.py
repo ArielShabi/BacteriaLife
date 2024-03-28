@@ -5,12 +5,9 @@ from PyQt5.QtSvg import QGraphicsSvgItem
 from PyQt5.QtGui import QResizeEvent
 
 from helpers.color import get_bacteria_color, get_food_color, get_portal_color
-from models.board import Board
 from models.board_data import BoardData
-from models.food import Food
 from project_types import Location
 from ui.bacteria_ui import BoardItemSvg
-from ui.food_ui import FoodUI
 from ui.ui_utils import apply_style_sheet_file
 
 CSS_FILE = "board.css"
@@ -22,11 +19,26 @@ PORTAL_SVG = "assets/magic-portal.svg"
 
 class BoardUi(QGraphicsView):
     def __init__(self, board: BoardData):
+        """
+        Initializes the BoardUi class.
+
+        Args:
+            board (BoardData): The board data.
+
+        Returns:
+            None
+        """
         super().__init__()
         self.board = board
         self.initUI()
 
     def initUI(self) -> None:
+        """
+        Initializes the user interface.
+
+        Returns:
+            None
+        """
         self.board_scene: QGraphicsScene = QGraphicsScene()
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -35,7 +47,16 @@ class BoardUi(QGraphicsView):
         self.fitInView(self.board_scene.sceneRect(),
                        Qt.AspectRatioMode.KeepAspectRatio)
 
-    def resizeEvent(self, event:Optional[QResizeEvent]) -> None:
+    def resizeEvent(self, event: Optional[QResizeEvent]) -> None:
+        """
+        Handles the resize event.
+
+        Args:
+            event (Optional[QResizeEvent]): The resize event.
+
+        Returns:
+            None
+        """
         super().resizeEvent(event)
         view_port = self.viewport()
 
@@ -47,16 +68,23 @@ class BoardUi(QGraphicsView):
         self.update_board(self.board)
 
     def update_board(self, board: BoardData) -> None:
+        """
+        Updates the board with new data.
+
+        Args:
+            board (BoardData): The updated board data.
+
+        Returns:
+            None
+        """
         self.board = board
         self.board_scene.clear()
         width_offset = self.rect().width() / self.board.width
         height_offset = self.rect().height() / self.board.height
 
         for bacteria, bacteria_location in self.board.bacterias:
-
             bacteria_ui = BoardItemSvg(BACTERIA_SVG, get_bacteria_color(
                 bacteria.properties), width_offset, height_offset)
-
             self.__add_item(width_offset, height_offset,
                             bacteria_location, bacteria_ui)
 
@@ -74,6 +102,18 @@ class BoardUi(QGraphicsView):
     def __add_item(self, width_offset: float, height_offset: float,
                    location: Location, svg: QGraphicsSvgItem
                    ) -> None:
+        """
+        Adds an item to the board scene.
+
+        Args:
+            width_offset (float): The width offset.
+            height_offset (float): The height offset.
+            location (Location): The location of the item.
+            svg (QGraphicsSvgItem): The SVG item to add.
+
+        Returns:
+            None
+        """
         max_x = self.rect().width()-svg.scale() * \
             svg.boundingRect().width()
         max_y = self.rect().height()-svg.scale() * \

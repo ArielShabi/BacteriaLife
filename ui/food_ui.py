@@ -9,7 +9,24 @@ FOOD_SVG = "assets/apple.svg"
 
 
 class FoodUI(QGraphicsSvgItem):
+    """
+    Represents the graphical representation of a food item in the simulation.
+
+    Args:
+        food (Food): The food item to be displayed.
+        width_offset (float): The desired width of the food item relative to the SVG size.
+        height_offset (float): The desired height of the food item relative to the SVG size.
+    """
+
     def __init__(self, food: Food, width_offset: float, height_offset: float):
+        """
+        Initializes a new instance of the FoodUI class.
+
+        Args:
+            food (Food): The food item to be displayed.
+            width_offset (float): The desired width of the food item relative to the SVG size.
+            height_offset (float): The desired height of the food item relative to the SVG size.
+        """
 
         super().__init__(FOOD_SVG)
 

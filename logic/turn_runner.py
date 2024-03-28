@@ -14,10 +14,30 @@ from project_types import Location
 
 
 class TurnRunner:
+    """
+    The TurnRunner class is responsible for running a single turn of the bacteria simulation.
+
+    Args:
+        settings (Settings): The settings object containing the simulation parameters.
+
+    Attributes:
+        settings (Settings): The settings object containing the simulation parameters.
+    """
+
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
 
     def run_turn(self, board: Board, turn_number: int) -> Board:
+        """
+        Runs a single turn of the bacteria simulation.
+
+        Args:
+            board (Board): The current state of the game board.
+            turn_number (int): The current turn number.
+
+        Returns:
+            Board: The updated game board after the turn.
+        """
         self.__generate_food(board, turn_number)
         self.__play_bacterias(board)
         self.__duplicate_bacterias(board)
@@ -26,6 +46,12 @@ class TurnRunner:
         return board
 
     def __play_bacterias(self, board: Board) -> None:
+        """
+        Plays the turn for each bacteria on the board.
+
+        Args:
+            board (Board): The current state of the game board.
+        """
         sorted_by_speed = sorted(
             board.bacterias, key=lambda bacteria_and_location: bacteria_and_location[0].properties.speed, reverse=True)
 
@@ -53,7 +79,13 @@ class TurnRunner:
                 board.update_bacteria(bacteria.id, bacteria, new_location)
 
     def __generate_food(self, board: Board, turn_number: int) -> None:
-        # if food_per_turn is a fraction, we will generate food every 1/food_per_turn turns
+        """
+        Generates food on the board based on the current turn number and settings.
+
+        Args:
+            board (Board): The current state of the game board.
+            turn_number (int): The current turn number.
+        """
         food_per_turn = self.settings.food_per_turn
 
         if food_per_turn < 1 and turn_number % int(1/(food_per_turn)) != 0:
@@ -75,6 +107,12 @@ class TurnRunner:
                 food_placed -= 1
 
     def __duplicate_bacterias(self,  board: Board) -> None:
+        """
+        Duplicates bacteria on the board if they have enough energy.
+
+        Args:
+            board (Board): The current state of the game board.
+        """
         for bacteria, _ in board.bacterias:
             if bacteria.energy < START_ENERGY * 2:
                 continue
@@ -93,6 +131,17 @@ class TurnRunner:
             board.add_bacteria(child_bacteria, location)
 
     def __get_bacteria_area_of_sense(self, bacteria: Bacteria, bacteria_location: Location, board: Board) -> list[list[BoardObject]]:
+        """
+        Gets the area of sense for a bacteria on the board.
+
+        Args:
+            bacteria (Bacteria): The bacteria object.
+            bacteria_location (Location): The current location of the bacteria.
+            board (Board): The current state of the game board.
+
+        Returns:
+            list[list[BoardObject]]: The 2D list representing the area of sense for the bacteria.
+        """
         start_location = utils.increase_location(
             bacteria_location, -bacteria.properties.sense)
 
@@ -117,6 +166,12 @@ class TurnRunner:
         return area_of_sense
 
     def __mutate_bacteria(self, bacteria: Bacteria) -> None:
+        """
+        Mutates the properties of a bacteria based on the mutation rate.
+
+        Args:
+            bacteria (Bacteria): The bacteria object.
+        """
         mutation_rate = self.settings.mutation_rate
 
         if random_event_occurred(mutation_rate):
@@ -126,11 +181,28 @@ class TurnRunner:
                 bacteria.properties.sense, MUTATION_CHANGE, 1, MAX_BACTERIA_SENSE)
 
     def __natural_selection(self, board: Board) -> None:
+        """
+        Performs natural selection by removing bacteria with zero or negative energy from the board.
+
+        Args:
+            board (Board): The current state of the game board.
+        """
         for bacteria, _ in board.bacterias:
             if bacteria.energy <= 0:
                 board.remove_bacteria(bacteria.id)
 
     def __check_magic_portal(self, board: Board, bacteria_location: Location, new_location: Location) -> Location:
+        """
+        Checks if the bacteria's movement crosses the magic portal and updates the new location accordingly.
+
+        Args:
+            board (Board): The current state of the game board.
+            bacteria_location (Location): The current location of the bacteria.
+            new_location (Location): The new location of the bacteria.
+
+        Returns:
+            Location: The updated new location of the bacteria.
+        """
         if board.magic_door and utils.is_point_on_line(bacteria_location, new_location, board.magic_door[0]):
             return board.magic_door[1]
         return new_location

@@ -25,6 +25,33 @@ FOOD_PER_TURN_STEPS = [1/3, 1/2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 
 class ToolbarUI(QWidget):
+    """
+    Represents the toolbar user interface for the BacteriaSim application.
+
+    The ToolbarUI class provides a graphical user interface for controlling the simulation.
+    It includes buttons for starting/pausing the simulation, changing settings, and displaying graphs.
+
+    Args:
+        game (GameRunner): The game runner object that manages the simulation.
+        update_board (Callable[[BoardData], None]): A callback function for updating the game board.
+        history_saver (HistorySaver): The history saver object for saving simulation history.
+
+    Attributes:
+        play_icon (QIcon): The icon for the play button.
+        pause_icon (QIcon): The icon for the pause button.
+        settings (Settings): The current game settings.
+        game (GameRunner): The game runner object that manages the simulation.
+        update_board (Callable[[BoardData], None]): A callback function for updating the game board.
+        history_saver (HistorySaver): The history saver object for saving simulation history.
+        play_pause_button (QPushButton): The button for starting/pausing the simulation.
+        restart_button (QPushButton): The button for restarting the simulation.
+        speed_slider (QSlider): The slider for adjusting the simulation speed.
+        mutation_slider (QSlider): The slider for adjusting the mutation rate.
+        food_slider (UnevenStepSlider): The slider for adjusting the food per turn.
+        settings_button (QPushButton): The button for changing settings.
+        graph_button (QPushButton): The button for displaying graphs.
+    """
+
     def __init__(self, game: GameRunner, update_board: Callable[[BoardData], None], history_saver: HistorySaver) -> None:
         super().__init__()
         self.play_icon = QIcon("assets/play.svg")
@@ -40,9 +67,26 @@ class ToolbarUI(QWidget):
                                self.__on_play_pause_changed)
 
     def toggle_play_pause(self, is_checked: bool) -> None:
+        """
+        Toggles the play/pause state of the simulation.
+
+        Args:
+            is_checked (bool): The new play/pause state.
+
+        Returns:
+            None
+        """
         self.game.toggle_play_pause(is_checked)
 
     def settings_button_clicked(self) -> None:
+        """
+        Handles the click event of the settings button.
+
+        Opens the settings modal dialog and updates the game settings accordingly.
+
+        Returns:
+            None
+        """
         settingsModal = SettingsModal(self.settings)
         is_running = self.play_pause_button.isChecked()
 
@@ -60,6 +104,15 @@ class ToolbarUI(QWidget):
             self.toggle_play_pause(True)
 
     def initUI(self) -> None:
+        """
+        Initializes the user interface for the toolbar.
+
+        This method sets up the layout and adds various buttons and sliders to the toolbar.
+        It also connects the appropriate signals to their respective slots.
+
+        Returns:
+            None
+        """
         layout = QHBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
@@ -148,14 +201,41 @@ class ToolbarUI(QWidget):
         apply_style_sheet_file(self, CSS_FILES)
 
     def __change_mutation_rate(self, value: int) -> None:
+        """
+        Changes the mutation rate based on the slider value.
+
+        Args:
+            value (int): The new slider value.
+
+        Returns:
+            None
+        """
         self.settings.mutation_rate = value/10
         self.game.change_settings(self.settings)
 
     def __change_food_rate(self, value: float) -> None:
+        """
+        Changes the food per turn rate based on the slider value.
+
+        Args:
+            value (float): The new slider value.
+
+        Returns:
+            None
+        """
         self.settings.food_per_turn = value
         self.game.change_settings(self.settings)
 
     def __on_play_pause_changed(self, is_playing: bool) -> None:
+        """
+        Handles the play/pause state change event.
+
+        Args:
+            is_playing (bool): The new play/pause state.
+
+        Returns:
+            None
+        """
         self.play_pause_button.setChecked(is_playing)
 
         if is_playing:
@@ -164,5 +244,13 @@ class ToolbarUI(QWidget):
             self.play_pause_button.setIcon(self.play_icon)
 
     def __restart_button_clicked(self) -> None:
+        """
+        Handles the click event of the restart button.
+
+        Restarts the simulation by clearing the history and initializing a new run.
+
+        Returns:
+            None
+        """
         self.history_saver.clear_history()
         self.game.initialize_run()
