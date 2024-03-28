@@ -1,9 +1,8 @@
 from datetime import datetime
 from typing import Callable, List
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QColor
 from PyQt5.QtCore import Qt
-from pyqttoast import Toast, ToastPreset
 
 from const import BUTTON_SIZE
 from logic.game_runner import ON_TURN_FINISHED, GameRunner
@@ -13,6 +12,7 @@ from ui.graphs.average_stats_graph import AverageStatsGraph
 from ui.graphs.food_amount_graph import FoodAmountGraph
 from ui.graphs.population_size_graph import PopulationSizeGraph
 from ui.graphs.stats_scatter_graph import StatsScatterGraph
+from ui.components.toast import Toast
 
 DARK_GRAPH_BACKGROUND = "#444444"
 
@@ -30,6 +30,8 @@ class GraphPage(QWidget):
             FoodAmountGraph(history_saver),
             StatsScatterGraph(history_saver)
         ]
+
+        self.__toast = Toast()
 
         game.add_listener(ON_TURN_FINISHED, lambda _: self.__update_graphs())
 
@@ -90,9 +92,5 @@ class GraphPage(QWidget):
             self._show_toast(file_name)
 
     def _show_toast(self, file_name: str) -> None:
-        toast = Toast(self)
-        toast.setDuration(5000)
-        toast.setTitle('Graphs saved to file')
-        toast.setText('Saved to ' + file_name)
-        toast.applyPreset(ToastPreset.SUCCESS)
-        toast.show()
+        message = f"Graphs saved to {file_name}"
+        self.__toast.show_toast(message)

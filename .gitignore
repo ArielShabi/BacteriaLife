@@ -3,7 +3,6 @@
 __pycache__/
 *.pyo
 *.pyd
-*.pyi
 *.pyz
 *.pyw
 *.pyz/
