@@ -15,15 +15,15 @@ class AverageStatsGraph(AbstractGraph):
         self.average_stats_graph.setTitle('Average stats vs Time')
         self.average_stats_graph.setLabel('left', 'Average stats')
         self.average_stats_graph.setLabel('bottom', 'Time (turns)')
-
-        self.speed_plot = self.average_stats_graph.plot(name='Avg Speed')
+        self.average_stats_graph.addLegend()
+        self.speed_plot = self.average_stats_graph.plot(name='Avg Speed')        
         self.speed_plot.setPen(SPEED_COLOR)
         self.sense_plot = self.average_stats_graph.plot(name='Avg Sense')
         self.sense_plot.setPen(SENSE_COLOR)
 
         self.average_stats_graph.setYRange(
             0, max(MAX_BACTERIA_SPEED, MAX_BACTERIA_SENSE))
-
+        
         return self.average_stats_graph
 
     def update_data(self) -> None:

@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
             None
         """
         super().__init__()
-        self.setWindowTitle("Bacteria Game")
+        self.setWindowTitle("Bacteria Life")
         self.__set_icon()
 
     def __set_icon(self) -> None:
